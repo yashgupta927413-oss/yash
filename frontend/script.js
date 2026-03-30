@@ -4,7 +4,7 @@ let policyMap = new Map();
 const apiBase =
   window.location.port === '5173' || window.location.hostname === 'localhost'
     ? 'http://127.0.0.1:8000'
-    : '';
+    : 'https://api.theyashgupta.com';
 
 function setupMenu() {
   const menuToggle = document.getElementById('menuToggle');
