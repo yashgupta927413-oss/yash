@@ -229,11 +229,6 @@ function setupGsap() {
     });
 
     mm.add('(max-width: 1024px)', () => {
-      gsap.set(mockup, {
-        transformPerspective: 1200,
-        transformOrigin: 'center center',
-      });
-
       gsap.fromTo(
         mockup,
         { opacity: 0, y: 35, scale: 0.95 },
@@ -245,8 +240,8 @@ function setupGsap() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: showcase,
-            start: 'top 82%',
-            end: 'top 48%',
+            start: 'top 78%',
+            end: 'top 45%',
             scrub: true,
             invalidateOnRefresh: true,
           },
@@ -254,9 +249,6 @@ function setupGsap() {
       );
 
       const mobileFrames = document.querySelectorAll('.frame');
-      const mobileDepthCards = gsap.utils.toArray('.depth-card');
-      const mobileOrbs = gsap.utils.toArray('.glow-orb');
-
       if (mobileFrames.length > 1) {
         const setActiveFrame = (index) => {
           mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
@@ -264,43 +256,27 @@ function setupGsap() {
 
         setActiveFrame(0);
 
-        const mobileTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: showcase,
-            start: 'top 12%',
-            end: '+=700',
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
+        ScrollTrigger.create({
+          trigger: showcase,
+          start: 'top 70%',
+          end: 'bottom 30%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            let index = 0;
+
+            if (progress < 0.34) {
+              index = 0;
+            } else if (progress < 0.67) {
+              index = 1;
+            } else {
+              index = 2;
+            }
+
+            setActiveFrame(index);
           },
         });
-
-        mobileTl
-          .to(mockup, { rotateY: 5, rotateX: -3, y: -8, scale: 1.01, duration: 1, ease: 'none' }, 0)
-          .to(mockup, { rotateY: -5, rotateX: 3, y: 6, scale: 1.01, duration: 1, ease: 'none' }, 1)
-          .to(mockup, { rotateY: 0, rotateX: 0, y: 0, scale: 1, duration: 1, ease: 'none' }, 2);
-
-        mobileDepthCards.forEach((card, i) => {
-          mobileTl.fromTo(
-            card,
-            { y: 16 + i * 6, opacity: 0, rotate: -5 + i * 3 },
-            { y: -10 - i * 8, opacity: 1, rotate: 4 - i * 2, duration: 1.2, ease: 'none' },
-            0.12 + i * 0.18
-          );
-        });
-
-        mobileOrbs.forEach((orb, i) => {
-          mobileTl.to(
-            orb,
-            { y: i % 2 === 0 ? -24 : 30, x: i % 2 === 0 ? 14 : -12, scale: 1.08, duration: 2, ease: 'none' },
-            0
-          );
-        });
-
-        mobileTl.add(() => setActiveFrame(0), 0.15);
-        mobileTl.add(() => setActiveFrame(1), 1.05);
-        mobileTl.add(() => setActiveFrame(2), 1.9);
 
         const screen = document.querySelector('.device-screen');
         if (screen) {
