@@ -242,6 +242,29 @@ body {
 
 .pricing-box { padding: 1.1rem; }
 .pricing-points p { margin: .42rem 0; color: var(--muted); }
+.plan-grid {
+  margin-top: .9rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .85rem;
+}
+.plan-card {
+  border: 1px solid var(--border);
+  border-radius: .9rem;
+  padding: .95rem;
+  background: rgba(255,255,255,.02);
+}
+.plan-card h3 { margin-top: 0; margin-bottom: .4rem; }
+.plan-card p { margin: 0; color: var(--muted); }
+.plan-price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #dbe7ff !important;
+  margin-bottom: .45rem !important;
+}
+.featured-plan {
+  background: linear-gradient(180deg, rgba(90, 143, 255, 0.24), rgba(122, 99, 255, 0.16));
+}
 
 .reviews-head {
   display: flex;
@@ -353,7 +376,8 @@ body {
 
   .module-grid,
   .google-review-grid,
-  .policy-grid {
+  .policy-grid,
+  .plan-grid {
     grid-template-columns: 1fr;
   }
 
