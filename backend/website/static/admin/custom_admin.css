@@ -1,0 +1,121 @@
+:root {
+  --admin-primary: #2f6bff;
+  --admin-primary-soft: #eef3ff;
+  --admin-text: #0f2251;
+  --admin-border: #d8e3ff;
+  --admin-card: #ffffff;
+}
+
+body,
+#container {
+  background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
+}
+
+#header {
+  background: linear-gradient(110deg, #2748b6, #3f73ff);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(39, 72, 182, 0.25);
+}
+
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+  color: #fff;
+  font-weight: 800;
+}
+
+.module,
+.inline-group,
+.submit-row,
+.dashboard .module {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(35, 67, 142, 0.08);
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: linear-gradient(110deg, #2f6bff, #6a8dff);
+  color: #fff;
+  font-weight: 700;
+}
+
+fieldset.module {
+  border-radius: 12px;
+}
+
+.object-tools a,
+.button,
+input[type='submit'],
+input[type='button'],
+.submit-row input,
+a.button,
+.button.default,
+input.default {
+  border-radius: 10px;
+  border: 1px solid #2f6bff;
+  background: linear-gradient(110deg, #2f6bff, #5d81ff);
+  color: #fff !important;
+}
+
+.button.default:hover,
+.object-tools a:hover,
+a.button:hover {
+  filter: brightness(1.04);
+}
+
+#changelist-filter {
+  border-left: 1px solid var(--admin-border);
+  background: #f7faff;
+}
+
+#changelist-filter h2 {
+  background: #e9f0ff;
+  color: var(--admin-text);
+}
+
+#changelist table thead th {
+  background: #edf3ff;
+}
+
+#changelist table tbody tr:hover,
+.change-list table tbody tr:hover {
+  background: var(--admin-primary-soft);
+}
+
+th,
+td,
+label,
+.help,
+.selector h2 {
+  color: var(--admin-text);
+}
+
+input[type='text'],
+input[type='email'],
+input[type='url'],
+input[type='number'],
+textarea,
+select {
+  border-radius: 8px;
+  border: 1px solid #c8d8ff;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2f6bff;
+  box-shadow: 0 0 0 3px rgba(47, 107, 255, 0.16);
+}
+
+.breadcrumbs {
+  background: #eaf1ff;
+}
+
+.dashboard .module table td a,
+.dashboard .module table th a {
+  color: #1f46b3;
+}
