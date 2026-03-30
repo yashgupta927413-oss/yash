@@ -9,6 +9,8 @@ This repository contains a **Django backend** and a **professional frontend** se
 
 ## Run Backend (Django)
 
+Compatible with Python 3.9+.
+
 ```bash
 cd backend
 pip install -r requirements.txt
