@@ -2,6 +2,8 @@ const counters = document.querySelectorAll('.stat-number');
 const reviews = document.querySelectorAll('.review-card');
 const nextBtn = document.getElementById('nextReview');
 const prevBtn = document.getElementById('prevReview');
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.querySelector('.nav-links');
 let reviewIndex = 0;
 
 function animateCounters() {
@@ -42,6 +44,21 @@ if (nextBtn && prevBtn && reviews.length > 0) {
     reviewIndex = (reviewIndex + 1) % reviews.length;
     showReview(reviewIndex);
   }, 6000);
+}
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    menuToggle.setAttribute('aria-expanded', String(!expanded));
+  });
+
+  navLinks.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
 }
 
 const statsSection = document.getElementById('results');
