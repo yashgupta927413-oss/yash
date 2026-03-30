@@ -1,11 +1,11 @@
-# theyashgupta.com - Professional Django + React Website
+# theyashgupta.com - Professional Django + Vite Website
 
-This repository now contains a **Django backend** and a **React frontend** focused on digital marketing services.
+This repository contains a **Django backend** and a **professional frontend** served via Vite, focused on digital marketing services.
 
 ## Project Structure
 
 - `backend/` - Django API (`/api/homepage/`)
-- `frontend/` - React (Vite) professional marketing website with image-rich sections
+- `frontend/` - Professional marketing website (Vite static frontend) with image-rich sections
 
 ## Run Backend (Django)
 
@@ -19,7 +19,7 @@ python manage.py runserver
 Django API endpoint:
 - `http://127.0.0.1:8000/api/homepage/`
 
-## Run Frontend (React)
+## Run Frontend (Vite)
 
 ```bash
 cd frontend
