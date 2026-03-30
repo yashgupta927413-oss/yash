@@ -5,6 +5,7 @@ const prevBtn = document.getElementById('prevReview');
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.querySelector('.nav-links');
 const faqQuestions = document.querySelectorAll('.faq-q');
+const serviceCardsFallback = document.querySelectorAll('.service-stack-3d .service-card');
 let reviewIndex = 0;
 
 function animateCounters() {
@@ -195,3 +196,24 @@ faqQuestions.forEach((button) => {
     }
   });
 });
+
+if (serviceCardsFallback.length > 0) {
+  serviceCardsFallback.forEach((card, index) => {
+    card.classList.add('animate-ready');
+    card.style.setProperty('--card-delay', `${index * 90}ms`);
+  });
+
+  const serviceObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          serviceObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.18 }
+  );
+
+  serviceCardsFallback.forEach((card) => serviceObserver.observe(card));
+}
