@@ -77,3 +77,48 @@ if (statsSection) {
 
   observer.observe(statsSection);
 }
+
+if (window.gsap && window.ScrollTrigger) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const showcase = document.querySelector('.showcase-section');
+  const mockup = document.querySelector('.device-mockup');
+  const frames = gsap.utils.toArray('.frame');
+
+  if (showcase && mockup && frames.length > 0) {
+    gsap.fromTo(
+      mockup,
+      { scale: 0.88, opacity: 0.75, y: 40 },
+      {
+        scale: 1,
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: showcase,
+          start: 'top 70%',
+          end: 'top 30%',
+          scrub: true,
+        },
+      }
+    );
+
+    const storyTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: showcase,
+        start: 'top top',
+        end: '+=1400',
+        scrub: true,
+        pin: true,
+      },
+    });
+
+    frames.forEach((frame, index) => {
+      storyTl.add(() => {
+        frames.forEach((item) => item.classList.remove('active'));
+        frame.classList.add('active');
+      }, index * 0.8);
+    });
+  }
+}

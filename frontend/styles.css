@@ -177,6 +177,63 @@ body {
   max-width: 780px;
 }
 
+.showcase-section {
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.showcase-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+  align-items: center;
+}
+
+.device-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.device-mockup {
+  width: min(430px, 100%);
+  border-radius: 1.2rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(170deg, #1a2a4f, #101c34);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .45);
+  overflow: hidden;
+}
+
+.device-header {
+  display: flex;
+  gap: .35rem;
+  padding: .7rem .8rem;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+.device-header span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.55);
+}
+
+.device-screen {
+  min-height: 280px;
+  padding: 1rem;
+  display: grid;
+}
+
+.frame {
+  display: none;
+  align-content: center;
+  gap: .35rem;
+  animation: fadeIn .35s ease;
+}
+
+.frame.active { display: grid; }
+.frame h3 { margin: 0; font-size: 1.35rem; }
+.frame p { margin: 0; color: #d5def7; }
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -385,6 +442,8 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .showcase-wrap { grid-template-columns: 1fr; }
+
   .nav { flex-wrap: wrap; }
 }
 
@@ -445,4 +504,5 @@ body {
   .policy-card, .google-card, .module-card, .review-card, .contact-box, .pricing-box { padding: .95rem; }
   .footer-links a { font-size: .84rem; }
   .whatsapp-float { bottom: 14px; right: 14px; }
+  .device-screen { min-height: 230px; }
 }
