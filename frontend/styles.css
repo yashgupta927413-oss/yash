@@ -80,6 +80,33 @@ body {
 .service-card h3 { margin: .9rem 1rem .25rem; }
 .service-card p { margin: 0 1rem 1rem; color: var(--muted); }
 
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.module-card {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 1rem 1rem .8rem;
+}
+.module-card h3 { margin-top: 0; }
+.module-card ul { padding-left: 1.05rem; margin: 0; }
+.module-card li { color: var(--muted); margin-bottom: .6rem; }
+
+.pricing-box {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 1.2rem;
+}
+.pricing-points p {
+  margin: .45rem 0;
+  color: var(--muted);
+}
+
 .reviews-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .review-controls { display: flex; gap: .5rem; }
 .control {
@@ -133,6 +160,7 @@ body {
 @media (max-width: 980px) {
   .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .module-grid { grid-template-columns: 1fr; }
   .nav { flex-wrap: wrap; }
 }
 
