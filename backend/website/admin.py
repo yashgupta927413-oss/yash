@@ -1,5 +1,8 @@
 from django.contrib import admin
+from django.http import JsonResponse
+from django.urls import path, reverse
 from django.utils.html import format_html
+import json
 from .models import (
     FAQ,
     GoogleReview,
@@ -26,16 +29,65 @@ class GraphicAdmin(admin.ModelAdmin):
         css = {"all": ("admin/custom_admin.css",)}
 
 
+class DragDropSortableAdmin(GraphicAdmin):
+    sortable_field = "sort_order"
+    drag_column_label = "Drag"
+
+    class Media:
+        css = {"all": ("admin/custom_admin.css", "admin/drag_sort.css")}
+        js = ("admin/drag_sort.js",)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "reorder/",
+                self.admin_site.admin_view(self.reorder_view),
+                name=f"{self.model._meta.app_label}_{self.model._meta.model_name}_reorder",
+            ),
+        ]
+        return custom_urls + urls
+
+    @admin.display(description=drag_column_label)
+    def drag_handle(self, obj):
+        reorder_url = reverse(
+            f"admin:{self.model._meta.app_label}_{self.model._meta.model_name}_reorder"
+        )
+        return format_html(
+            '<span class="drag-handle" title="Drag to reorder" data-reorder-url="{}">⋮⋮</span>',
+            reorder_url,
+        )
+
+    def reorder_view(self, request):
+        if request.method != "POST":
+            return JsonResponse({"detail": "Method not allowed"}, status=405)
+        try:
+            payload = json.loads(request.body.decode("utf-8"))
+            ids = payload.get("ids", [])
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return JsonResponse({"detail": "Invalid payload"}, status=400)
+
+        queryset = self.model.objects.filter(pk__in=ids)
+        objects_by_id = {obj.pk: obj for obj in queryset}
+        for index, obj_id in enumerate(ids):
+            obj = objects_by_id.get(obj_id)
+            if obj is None:
+                continue
+            setattr(obj, self.sortable_field, index)
+            obj.save(update_fields=[self.sortable_field])
+        return JsonResponse({"ok": True})
+
+
 @admin.register(FAQ)
-class FAQAdmin(GraphicAdmin):
-    list_display = ("question", "sort_order", "is_active")
+class FAQAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "question", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("question", "answer")
 
 
 @admin.register(Policy)
-class PolicyAdmin(GraphicAdmin):
-    list_display = ("title", "policy_type", "sort_order", "is_active")
+class PolicyAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "title", "policy_type", "sort_order", "is_active")
     list_filter = ("policy_type", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("title", "content")
@@ -79,22 +131,22 @@ class SiteSettingAdmin(GraphicAdmin):
 
 
 @admin.register(Statistic)
-class StatisticAdmin(GraphicAdmin):
-    list_display = ("label", "value", "suffix", "sort_order", "is_active")
+class StatisticAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "label", "value", "suffix", "sort_order", "is_active")
     list_editable = ("value", "suffix", "sort_order", "is_active")
     search_fields = ("label",)
 
 
 @admin.register(Tool)
-class ToolAdmin(GraphicAdmin):
-    list_display = ("name", "sort_order", "is_active")
+class ToolAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "name", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("name",)
 
 
 @admin.register(Service)
-class ServiceAdmin(GraphicAdmin):
-    list_display = ("title", "preview_image", "sort_order", "is_active")
+class ServiceAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "title", "preview_image", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("title", "description")
 
@@ -104,35 +156,35 @@ class ServiceAdmin(GraphicAdmin):
 
 
 @admin.register(Module)
-class ModuleAdmin(GraphicAdmin):
-    list_display = ("title", "sort_order", "is_active")
+class ModuleAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "title", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("title", "item_1", "item_2", "item_3", "item_4")
 
 
 @admin.register(PricingPlan)
-class PricingPlanAdmin(GraphicAdmin):
-    list_display = ("title", "price", "is_featured", "sort_order", "is_active")
+class PricingPlanAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "title", "price", "is_featured", "sort_order", "is_active")
     list_editable = ("price", "is_featured", "sort_order", "is_active")
     search_fields = ("title", "description")
 
 
 @admin.register(Review)
-class ReviewAdmin(GraphicAdmin):
-    list_display = ("customer_name", "customer_title", "source", "sort_order", "is_active")
+class ReviewAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "customer_name", "customer_title", "source", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("customer_name", "customer_title", "quote")
 
 
 @admin.register(GoogleReview)
-class GoogleReviewAdmin(GraphicAdmin):
-    list_display = ("rating", "source_label", "sort_order", "is_active")
+class GoogleReviewAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "rating", "source_label", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("quote", "source_label")
 
 
 @admin.register(ProcessStep)
-class ProcessStepAdmin(GraphicAdmin):
-    list_display = ("step_number", "title", "sort_order", "is_active")
+class ProcessStepAdmin(DragDropSortableAdmin):
+    list_display = ("drag_handle", "step_number", "title", "sort_order", "is_active")
     list_editable = ("sort_order", "is_active")
     search_fields = ("step_number", "title", "description")
