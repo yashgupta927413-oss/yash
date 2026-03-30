@@ -1,0 +1,31 @@
+:root {
+  --primary: #0a5cff;
+}
+
+#header {
+  background: linear-gradient(120deg, #0f172a, #1e293b);
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: linear-gradient(120deg, #0a5cff, #1d4ed8);
+}
+
+.object-tools a,
+.button,
+input[type='submit'],
+input[type='button'],
+.submit-row input,
+a.button {
+  border-radius: 10px;
+}
+
+.change-list table tbody tr:hover {
+  background: #f5f9ff;
+}
+
+fieldset.module {
+  border-radius: 12px;
+  overflow: hidden;
+}

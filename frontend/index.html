@@ -19,7 +19,7 @@
   <body>
     <header class="hero" id="top">
       <nav class="nav container">
-        <a class="brand" href="#top">Yash Gupta</a>
+        <a class="brand" id="brandName" href="#top">Yash Gupta</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
         <ul class="nav-links">
           <li><a href="#services">Services</a></li>
@@ -34,20 +34,20 @@
       </nav>
 
       <div class="container hero-content">
-        <p class="eyebrow">Performance Marketing for Serious Growth</p>
-        <h1>Scale Leads & Sales with SEO, Ads, and Conversion-Focused Execution</h1>
-        <p class="lead">
+        <p class="eyebrow" id="heroEyebrow">Performance Marketing for Serious Growth</p>
+        <h1 id="heroTitle">Scale Leads & Sales with SEO, Ads, and Conversion-Focused Execution</h1>
+        <p class="lead" id="heroDescription">
           I'm <strong>Yash Gupta</strong>. I help businesses grow with SEO, SEM, Google Ads,
           Facebook/Instagram Ads, and digital funnels built for measurable ROI.
         </p>
         <div class="trust-row">
-          <span>✅ MSME Registered Business: <strong>theyashgupta.com</strong></span>
-          <span>✅ Performance-Focused Digital Marketing</span>
-          <span>✅ Transparent Reporting & Lead Tracking</span>
+          <span id="trustBadge1">✅ MSME Registered Business: <strong>theyashgupta.com</strong></span>
+          <span id="trustBadge2">✅ Performance-Focused Digital Marketing</span>
+          <span id="trustBadge3">✅ Transparent Reporting & Lead Tracking</span>
         </div>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#contact">Get Free Audit</a>
-          <a class="btn btn-outline" href="#reviews">See Client Reviews</a>
+          <a class="btn btn-primary" id="primaryCtaText" href="#contact">Get Free Audit</a>
+          <a class="btn btn-outline" id="secondaryCtaText" href="#reviews">See Client Reviews</a>
         </div>
       </div>
     </header>
@@ -93,7 +93,7 @@
       </section>
 
       <section id="results" class="section container">
-        <div class="stats-grid">
+        <div class="stats-grid" id="statsGrid">
           <article class="stat-card">
             <p class="stat-number" data-target="180">0</p>
             <p class="stat-label">Avg. Traffic Growth %</p>
@@ -116,7 +116,7 @@
       <section class="section brand-strip-section">
         <div class="container">
           <p class="strip-title">Platforms & Tools We Use for Growth</p>
-          <div class="brand-strip">
+          <div class="brand-strip" id="brandStrip">
             <span>Google Ads</span>
             <span>Meta Ads</span>
             <span>GA4</span>
@@ -138,7 +138,7 @@
             End-to-end digital marketing support to improve visibility, reduce acquisition costs,
             and increase conversion rates.
           </p>
-          <div class="service-grid">
+          <div class="service-grid" id="serviceGrid">
             <article class="service-card">
               <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80" alt="SEO strategy" />
               <h3>SEO + Content Strategy</h3>
@@ -180,7 +180,7 @@
           exactly what your business needs.
         </p>
 
-        <div class="module-grid">
+        <div class="module-grid" id="moduleGrid">
           <article class="module-card">
             <h3>Email Marketing</h3>
             <ul>
@@ -236,7 +236,7 @@
             <p>✅ Lead validation & replacement policy</p>
             <p>✅ Scalable campaigns once quality and CPL targets are met</p>
           </div>
-          <div class="plan-grid">
+          <div class="plan-grid" id="planGrid">
             <article class="plan-card">
               <h3>Small Website</h3>
               <p class="plan-price">₹9,999</p>
@@ -307,7 +307,7 @@
           <p class="section-text">
             Your reputation section can be synced with live Google reviews. For now, this block highlights Google review presence and directs visitors to your Google profile.
           </p>
-          <div class="google-review-grid">
+          <div class="google-review-grid" id="googleReviewGrid">
             <article class="google-card">
               <p class="rating">★★★★★</p>
               <p>“Great campaign planning and execution. Lead quality improved substantially.”</p>
@@ -330,7 +330,7 @@
       <section id="process" class="section container">
         <h2>Our Fashionable Growth Framework</h2>
         <p class="section-text">A structured 4-step process to keep strategy, execution, and reporting aligned.</p>
-        <div class="timeline-grid">
+        <div class="timeline-grid" id="timelineGrid">
           <article class="timeline-card">
             <span>01</span>
             <h3>Discovery & Audit</h3>
@@ -379,9 +379,9 @@
             Share your business goals and ad budget. I’ll send a custom action plan for traffic, leads, and conversions.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a>
-            <a class="btn btn-outline" href="tel:+919696345822">Call: +91 96963 45822</a>
-            <a class="btn btn-outline" target="_blank" rel="noopener noreferrer" href="https://wa.me/919696345822?text=Hi%20Yash%2C%20I%20want%20digital%20marketing%20help%20for%20my%20business.">Chat on WhatsApp</a>
+            <a class="btn btn-primary" id="emailBtn" href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a>
+            <a class="btn btn-outline" id="phoneBtn" href="tel:+919696345822">Call: +91 96963 45822</a>
+            <a class="btn btn-outline" id="waBtn" target="_blank" rel="noopener noreferrer" href="https://wa.me/919696345822?text=Hi%20Yash%2C%20I%20want%20digital%20marketing%20help%20for%20my%20business.">Chat on WhatsApp</a>
           </div>
         </div>
       </section>
@@ -389,6 +389,7 @@
 
     <a
       class="whatsapp-float"
+      id="waFloat"
       target="_blank"
       rel="noopener noreferrer"
       href="https://wa.me/919696345822?text=Hi%20Yash%2C%20I%20found%20your%20website%20and%20need%20digital%20marketing%20support."
@@ -416,7 +417,7 @@
 
     <footer class="footer">
       <div class="container footer-wrap">
-        <p>© 2026 Yash Gupta · Digital Marketing & IT Services</p>
+        <p>© 2026 <span id="footerBrandName">Yash Gupta</span> · Digital Marketing & IT Services</p>
         <div class="footer-links" id="footerPolicyLinks">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms</a>

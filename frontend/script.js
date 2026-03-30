@@ -1,54 +1,11 @@
-const counters = document.querySelectorAll('.stat-number');
-const reviews = document.querySelectorAll('.review-card');
-const nextBtn = document.getElementById('nextReview');
-const prevBtn = document.getElementById('prevReview');
-const menuToggle = document.getElementById('menuToggle');
-const navLinks = document.querySelector('.nav-links');
-const faqQuestions = document.querySelectorAll('.faq-q');
-const serviceCardsFallback = document.querySelectorAll('.service-stack-3d .service-card');
 let reviewIndex = 0;
+let reviewInterval;
 
-function animateCounters() {
-  counters.forEach((counter) => {
-    const target = Number(counter.dataset.target || 0);
-    let current = 0;
-    const step = Math.max(1, Math.ceil(target / 40));
+function setupMenu() {
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (!menuToggle || !navLinks) return;
 
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
-      }
-      counter.textContent = `${current}${target >= 100 ? '+' : 'x'}`;
-    }, 25);
-  });
-}
-
-function showReview(index) {
-  reviews.forEach((card, i) => {
-    card.classList.toggle('active', i === index);
-  });
-}
-
-if (nextBtn && prevBtn && reviews.length > 0) {
-  nextBtn.addEventListener('click', () => {
-    reviewIndex = (reviewIndex + 1) % reviews.length;
-    showReview(reviewIndex);
-  });
-
-  prevBtn.addEventListener('click', () => {
-    reviewIndex = (reviewIndex - 1 + reviews.length) % reviews.length;
-    showReview(reviewIndex);
-  });
-
-  setInterval(() => {
-    reviewIndex = (reviewIndex + 1) % reviews.length;
-    showReview(reviewIndex);
-  }, 6000);
-}
-
-if (menuToggle && navLinks) {
   menuToggle.addEventListener('click', () => {
     navLinks.classList.toggle('open');
     const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
@@ -63,8 +20,67 @@ if (menuToggle && navLinks) {
   });
 }
 
-const statsSection = document.getElementById('results');
-if (statsSection) {
+function setupFaq() {
+  document.querySelectorAll('.faq-q').forEach((button) => {
+    button.addEventListener('click', () => {
+      const item = button.closest('.faq-item');
+      if (item) item.classList.toggle('open');
+    });
+  });
+}
+
+function setupReviews() {
+  const reviewCards = document.querySelectorAll('.review-card');
+  const nextBtn = document.getElementById('nextReview');
+  const prevBtn = document.getElementById('prevReview');
+  if (!nextBtn || !prevBtn || reviewCards.length === 0) return;
+
+  const showReview = (index) => {
+    reviewCards.forEach((card, i) => card.classList.toggle('active', i === index));
+  };
+
+  nextBtn.onclick = () => {
+    reviewIndex = (reviewIndex + 1) % reviewCards.length;
+    showReview(reviewIndex);
+  };
+
+  prevBtn.onclick = () => {
+    reviewIndex = (reviewIndex - 1 + reviewCards.length) % reviewCards.length;
+    showReview(reviewIndex);
+  };
+
+  if (reviewInterval) clearInterval(reviewInterval);
+  reviewInterval = setInterval(() => {
+    reviewIndex = (reviewIndex + 1) % reviewCards.length;
+    showReview(reviewIndex);
+  }, 6000);
+
+  showReview(reviewIndex);
+}
+
+function animateCounters() {
+  const counters = document.querySelectorAll('.stat-number');
+  counters.forEach((counter) => {
+    const target = Number(counter.dataset.target || 0);
+    const suffix = counter.dataset.suffix || '+';
+    let current = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      counter.textContent = `${current}${suffix}`;
+    }, 25);
+  });
+}
+
+function setupCounterObserver() {
+  const statsSection = document.getElementById('results');
+  if (!statsSection) return;
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -80,7 +96,31 @@ if (statsSection) {
   observer.observe(statsSection);
 }
 
-if (window.gsap && window.ScrollTrigger) {
+function setupGsap() {
+  const serviceCardsFallback = document.querySelectorAll('.service-stack-3d .service-card');
+  if (serviceCardsFallback.length > 0) {
+    serviceCardsFallback.forEach((card, index) => {
+      card.classList.add('animate-ready');
+      card.style.setProperty('--card-delay', `${index * 90}ms`);
+    });
+
+    const serviceObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            serviceObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.18 }
+    );
+
+    serviceCardsFallback.forEach((card) => serviceObserver.observe(card));
+  }
+
+  if (!(window.gsap && window.ScrollTrigger)) return;
+
   gsap.registerPlugin(ScrollTrigger);
 
   const showcase = document.querySelector('.showcase-section');
@@ -201,46 +241,24 @@ if (window.gsap && window.ScrollTrigger) {
     serviceCards.forEach((card) => {
       const image = card.querySelector('img');
       if (!image) return;
-
-      card.addEventListener('mouseenter', () => {
-        gsap.to(image, { scale: 1.12, duration: 0.45, ease: 'power2.out' });
-      });
-
-      card.addEventListener('mouseleave', () => {
-        gsap.to(image, { scale: 1, duration: 0.45, ease: 'power2.out' });
-      });
+      card.addEventListener('mouseenter', () => gsap.to(image, { scale: 1.12, duration: 0.45, ease: 'power2.out' }));
+      card.addEventListener('mouseleave', () => gsap.to(image, { scale: 1, duration: 0.45, ease: 'power2.out' }));
     });
   }
 }
 
-faqQuestions.forEach((button) => {
-  button.addEventListener('click', () => {
-    const item = button.closest('.faq-item');
-    if (item) {
-      item.classList.toggle('open');
-    }
-  });
-});
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el && value) el.textContent = value;
+}
 
-if (serviceCardsFallback.length > 0) {
-  serviceCardsFallback.forEach((card, index) => {
-    card.classList.add('animate-ready');
-    card.style.setProperty('--card-delay', `${index * 90}ms`);
-  });
-
-  const serviceObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          serviceObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.18 }
-  );
-
-  serviceCardsFallback.forEach((card) => serviceObserver.observe(card));
+function escapeHtml(value) {
+  return String(value || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
 
 async function loadAdminManagedContent() {
@@ -249,21 +267,110 @@ async function loadAdminManagedContent() {
     if (!response.ok) return;
     const data = await response.json();
 
+    setText('brandName', data.brand);
+    setText('footerBrandName', data.brand);
+    setText('heroEyebrow', data.hero_eyebrow);
+    setText('heroTitle', data.hero_title);
+    setText('heroDescription', data.hero_description);
+    setText('primaryCtaText', data.primary_cta_text);
+    setText('secondaryCtaText', data.secondary_cta_text);
+
+    if (Array.isArray(data.trust_badges) && data.trust_badges.length >= 3) {
+      setText('trustBadge1', `✅ ${data.trust_badges[0]}`);
+      setText('trustBadge2', `✅ ${data.trust_badges[1]}`);
+      setText('trustBadge3', `✅ ${data.trust_badges[2]}`);
+    }
+
+    if (Array.isArray(data.stats) && data.stats.length > 0) {
+      const statsGrid = document.getElementById('statsGrid');
+      if (statsGrid) {
+        statsGrid.innerHTML = data.stats
+          .map(
+            (item) => `<article class="stat-card"><p class="stat-number" data-target="${item.value}" data-suffix="${escapeHtml(item.suffix || '+')}">0</p><p class="stat-label">${escapeHtml(item.label)}</p></article>`
+          )
+          .join('');
+      }
+    }
+
+    if (Array.isArray(data.tools) && data.tools.length > 0) {
+      const brandStrip = document.getElementById('brandStrip');
+      if (brandStrip) {
+        brandStrip.innerHTML = data.tools.map((tool) => `<span>${escapeHtml(tool)}</span>`).join('');
+      }
+    }
+
+    if (Array.isArray(data.service_cards) && data.service_cards.length > 0) {
+      const serviceGrid = document.getElementById('serviceGrid');
+      if (serviceGrid) {
+        serviceGrid.innerHTML = data.service_cards
+          .map(
+            (service) => `<article class="service-card"><img src="${escapeHtml(service.image_url)}" alt="${escapeHtml(service.title)}" /><h3>${escapeHtml(service.title)}</h3><p>${escapeHtml(service.description)}</p></article>`
+          )
+          .join('');
+      }
+    }
+
+    if (Array.isArray(data.modules) && data.modules.length > 0) {
+      const moduleGrid = document.getElementById('moduleGrid');
+      if (moduleGrid) {
+        moduleGrid.innerHTML = data.modules
+          .map(
+            (item) => `<article class="module-card"><h3>${escapeHtml(item.title)}</h3><ul><li>${escapeHtml(item.item_1)}</li><li>${escapeHtml(item.item_2)}</li><li>${escapeHtml(item.item_3)}</li><li>${escapeHtml(item.item_4)}</li></ul></article>`
+          )
+          .join('');
+      }
+    }
+
+    if (Array.isArray(data.pricing_plans) && data.pricing_plans.length > 0) {
+      const planGrid = document.getElementById('planGrid');
+      if (planGrid) {
+        planGrid.innerHTML = data.pricing_plans
+          .map(
+            (plan) => `<article class="plan-card ${plan.is_featured ? 'featured-plan' : ''}"><h3>${escapeHtml(plan.title)}</h3><p class="plan-price">${escapeHtml(plan.price)}</p><p>${escapeHtml(plan.description)}</p></article>`
+          )
+          .join('');
+      }
+    }
+
+    if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+      const reviewSlider = document.getElementById('reviewSlider');
+      if (reviewSlider) {
+        reviewSlider.innerHTML = data.reviews
+          .map(
+            (review, index) => `<article class="review-card ${index === 0 ? 'active' : ''}"><p>“${escapeHtml(review.quote)}”</p><h4>${escapeHtml(review.customer_name)}</h4><span>${escapeHtml(review.customer_title)}</span></article>`
+          )
+          .join('');
+      }
+    }
+
+    if (Array.isArray(data.google_reviews) && data.google_reviews.length > 0) {
+      const googleReviewGrid = document.getElementById('googleReviewGrid');
+      if (googleReviewGrid) {
+        googleReviewGrid.innerHTML = data.google_reviews
+          .map(
+            (item) => `<article class="google-card"><p class="rating">${escapeHtml(item.rating)}</p><p>“${escapeHtml(item.quote)}”</p><span>${escapeHtml(item.source_label)}</span></article>`
+          )
+          .join('');
+      }
+    }
+
+    if (Array.isArray(data.process_steps) && data.process_steps.length > 0) {
+      const timelineGrid = document.getElementById('timelineGrid');
+      if (timelineGrid) {
+        timelineGrid.innerHTML = data.process_steps
+          .map(
+            (step) => `<article class="timeline-card"><span>${escapeHtml(step.step_number)}</span><h3>${escapeHtml(step.title)}</h3><p>${escapeHtml(step.description)}</p></article>`
+          )
+          .join('');
+      }
+    }
+
     if (Array.isArray(data.faqs) && data.faqs.length > 0) {
       const faqContainer = document.getElementById('faqContainer');
       if (faqContainer) {
         faqContainer.innerHTML = `<h2>Frequently Asked Questions</h2>${data.faqs
-          .map(
-            (faq) => `\n<div class=\"faq-item\">\n<button class=\"faq-q\">${faq.question}</button>\n<p class=\"faq-a\">${faq.answer}</p>\n</div>`
-          )
+          .map((faq) => `<div class="faq-item"><button class="faq-q">${escapeHtml(faq.question)}</button><p class="faq-a">${escapeHtml(faq.answer)}</p></div>`)
           .join('')}`;
-
-        faqContainer.querySelectorAll('.faq-q').forEach((button) => {
-          button.addEventListener('click', () => {
-            const item = button.closest('.faq-item');
-            if (item) item.classList.toggle('open');
-          });
-        });
       }
     }
 
@@ -271,23 +378,56 @@ async function loadAdminManagedContent() {
       const policyCards = document.getElementById('policyCards');
       if (policyCards) {
         policyCards.innerHTML = data.policies
-          .map(
-            (policy) =>
-              `<article class=\"policy-card\"><h3>${policy.title}</h3><p>${policy.content}</p></article>`
-          )
+          .map((policy) => `<article class="policy-card"><h3>${escapeHtml(policy.title)}</h3><p>${escapeHtml(policy.content)}</p></article>`)
           .join('');
       }
 
       const footerPolicyLinks = document.getElementById('footerPolicyLinks');
       if (footerPolicyLinks) {
         footerPolicyLinks.innerHTML = data.policies
-          .map((policy) => `<a href=\"#\">${policy.title}</a>`)
+          .map((policy) => `<a href="#">${escapeHtml(policy.title)}</a>`)
           .join('');
       }
+    }
+
+    if (data.contact_email) {
+      const emailBtn = document.getElementById('emailBtn');
+      if (emailBtn) {
+        emailBtn.href = `mailto:${data.contact_email}`;
+        emailBtn.textContent = data.contact_email;
+      }
+    }
+
+    if (data.contact_phone) {
+      const digits = String(data.contact_phone).replace(/[^\d+]/g, '');
+      const phoneBtn = document.getElementById('phoneBtn');
+      if (phoneBtn) {
+        phoneBtn.href = `tel:${digits}`;
+        phoneBtn.textContent = `Call: ${data.contact_phone}`;
+      }
+    }
+
+    if (data.whatsapp_number) {
+      const message = encodeURIComponent('Hi Yash, I want digital marketing help for my business.');
+      const floatMessage = encodeURIComponent('Hi Yash, I found your website and need digital marketing support.');
+      const waBtn = document.getElementById('waBtn');
+      const waFloat = document.getElementById('waFloat');
+      if (waBtn) waBtn.href = `https://wa.me/${data.whatsapp_number}?text=${message}`;
+      if (waFloat) waFloat.href = `https://wa.me/${data.whatsapp_number}?text=${floatMessage}`;
     }
   } catch (_error) {
     // keep static content if API is unavailable
   }
 }
 
-loadAdminManagedContent();
+function boot() {
+  setupMenu();
+  setupFaq();
+  setupReviews();
+  setupCounterObserver();
+  setupGsap();
+}
+
+loadAdminManagedContent().finally(() => {
+  boot();
+});

@@ -46,6 +46,9 @@ In admin, update:
 - Policies
 - Site Settings (email, phone, WhatsApp, business name)
 - Users (change username/password anytime)
+- Statistics, Tools, Services, Growth Modules, Pricing Plans, Reviews, Google Reviews, and Process Steps
+
+Policy pages are pre-seeded with starter content on first migration and can be fully edited from admin.
 
 ## Run Backend + Frontend together (single command)
 
