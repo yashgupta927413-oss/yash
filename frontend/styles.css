@@ -66,6 +66,16 @@ body {
   font-weight: 800;
   letter-spacing: .2px;
   font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.brand-logo {
+  width: 148px;
+  max-width: 46vw;
+  height: auto;
+  display: block;
 }
 
 .nav-links {
@@ -586,6 +596,17 @@ body {
   flex-wrap: wrap;
 }
 
+.footer-brandline {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+.footer-logo {
+  width: 20px;
+  height: 20px;
+}
+
 .footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -725,6 +746,7 @@ body.modal-open {
   }
 
   .nav .btn-outline { display: none; }
+  .brand-logo { width: 126px; }
 
   .hero-actions {
     flex-direction: column;
