@@ -309,6 +309,27 @@ function setupBackToTop() {
   toggle();
 }
 
+function applySectionOrder(sectionOrder) {
+  if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) return;
+  const main = document.getElementById('mainContent');
+  if (!main) return;
+
+  sectionOrder.forEach((sectionId) => {
+    if (sectionId === 'policies') {
+      const policiesSection = document.getElementById('policies');
+      const footer = document.querySelector('footer.footer');
+      if (policiesSection && footer && footer.parentNode) {
+        footer.parentNode.insertBefore(policiesSection, footer);
+      }
+      return;
+    }
+    const section = document.getElementById(sectionId);
+    if (section && section.parentNode === main) {
+      main.appendChild(section);
+    }
+  });
+}
+
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el && value) el.textContent = value;
@@ -453,6 +474,8 @@ async function loadAdminManagedContent() {
           .join('');
       }
     }
+
+    applySectionOrder(data.section_order);
 
     if (data.contact_email) {
       const emailBtn = document.getElementById('emailBtn');

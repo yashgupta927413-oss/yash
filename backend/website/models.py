@@ -64,6 +64,11 @@ class SiteSetting(models.Model):
     support_email = models.EmailField(default="yash@theyashgupta.com")
     support_phone = models.CharField(max_length=30, default="+91 96963 45822")
     whatsapp_number = models.CharField(max_length=20, default="919696345822")
+    section_order = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Homepage section IDs in preferred order",
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:

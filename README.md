@@ -47,6 +47,7 @@ In admin, update:
 - Site Settings (email, phone, WhatsApp, business name)
 - Users (change username/password anytime)
 - Statistics, Tools, Services, Growth Modules, Pricing Plans, Reviews, Google Reviews, and Process Steps
+- Drag-and-drop full homepage section order via **Site Settings → Open drag editor**
 
 Policy pages are pre-seeded with starter content on first migration and can be fully edited from admin.
 

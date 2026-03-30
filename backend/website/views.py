@@ -127,6 +127,7 @@ def homepage_data(request):
         "contact_phone": settings.support_phone if settings else "+91 96963 45822",
         "whatsapp_number": settings.whatsapp_number if settings else "919696345822",
         "show_default_admin_note": settings.show_default_admin_note if settings else True,
+        "section_order": settings.section_order if settings else [],
         "faqs": faqs,
         "policies": policies,
         "stats": stats,

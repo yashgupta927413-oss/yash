@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import path, reverse
+from django.shortcuts import redirect, render
 from django.utils.html import format_html
 import json
 from .models import (
@@ -95,7 +96,7 @@ class PolicyAdmin(DragDropSortableAdmin):
 
 @admin.register(SiteSetting)
 class SiteSettingAdmin(GraphicAdmin):
-    list_display = ("business_name", "support_email", "support_phone", "updated_at")
+    list_display = ("business_name", "support_email", "support_phone", "layout_editor_link", "updated_at")
     readonly_fields = ("updated_at",)
     fieldsets = (
         (
@@ -124,10 +125,65 @@ class SiteSettingAdmin(GraphicAdmin):
         ),
         (
             "Contacts",
-            {"fields": ("support_email", "support_phone", "whatsapp_number")},
+            {"fields": ("support_email", "support_phone", "whatsapp_number", "section_order")},
         ),
         ("Meta", {"fields": ("updated_at",)}),
     )
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "layout-editor/",
+                self.admin_site.admin_view(self.layout_editor_view),
+                name="website_sitesetting_layout_editor",
+            )
+        ]
+        return custom_urls + urls
+
+    @admin.display(description="Layout")
+    def layout_editor_link(self, obj):
+        url = reverse("admin:website_sitesetting_layout_editor")
+        return format_html('<a class="button" href="{}">Open drag editor</a>', url)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["layout_editor_url"] = reverse(
+            "admin:website_sitesetting_layout_editor"
+        )
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def layout_editor_view(self, request):
+        settings = SiteSetting.objects.first()
+        if not settings:
+            settings = SiteSetting.objects.create()
+        default_sections = [
+            "showcase",
+            "results",
+            "services",
+            "specialized-services",
+            "pricing",
+            "reviews",
+            "google-reviews",
+            "process",
+            "contact",
+            "policies",
+        ]
+        section_order = settings.section_order or default_sections
+        if request.method == "POST":
+            ids = request.POST.get("section_order", "")
+            parsed = [item.strip() for item in ids.split(",") if item.strip()]
+            settings.section_order = parsed or default_sections
+            settings.save(update_fields=["section_order"])
+            self.message_user(request, "Layout order updated successfully.")
+            return redirect("admin:website_sitesetting_layout_editor")
+
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "Drag-and-Drop Website Layout Editor",
+            "section_order": section_order,
+        }
+        return render(request, "admin/website/layout_editor.html", context)
 
 
 @admin.register(Statistic)
