@@ -240,6 +240,27 @@ body {
   gap: .95rem;
 }
 
+.brand-strip-section {
+  padding-top: 0;
+}
+.strip-title {
+  color: var(--muted);
+  margin-bottom: .7rem;
+}
+.brand-strip {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.brand-strip span {
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  border-radius: 999px;
+  padding: .38rem .72rem;
+  color: #d2ddf8;
+  font-size: .9rem;
+}
+
 .stat-card,
 .service-card,
 .module-card,
@@ -358,6 +379,59 @@ body {
 .google-card .rating { margin: 0 0 .35rem; color: #ffd166; letter-spacing: 1px; }
 .google-card span { color: #9ab6ff; font-size: .9rem; }
 
+.timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .85rem;
+  margin-top: 1rem;
+}
+.timeline-card {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  padding: 1rem;
+}
+.timeline-card span {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  background: rgba(90, 143, 255, 0.2);
+  color: #d6e3ff;
+}
+.timeline-card h3 { margin-bottom: .35rem; }
+.timeline-card p { margin: 0; color: var(--muted); }
+
+.faq-wrap { max-width: 880px; }
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: .85rem;
+  background: var(--surface);
+  margin-bottom: .7rem;
+  overflow: hidden;
+}
+.faq-q {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: #e9efff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: .9rem 1rem;
+  cursor: pointer;
+}
+.faq-a {
+  margin: 0;
+  color: var(--muted);
+  padding: 0 1rem 1rem;
+  display: none;
+}
+.faq-item.open .faq-a { display: block; }
+
 .contact-box { padding: 1.2rem; }
 
 .whatsapp-float {
@@ -434,7 +508,8 @@ body {
   .module-grid,
   .google-review-grid,
   .policy-grid,
-  .plan-grid {
+  .plan-grid,
+  .timeline-grid {
     grid-template-columns: 1fr;
   }
 

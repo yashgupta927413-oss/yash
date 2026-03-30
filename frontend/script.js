@@ -4,6 +4,7 @@ const nextBtn = document.getElementById('nextReview');
 const prevBtn = document.getElementById('prevReview');
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.querySelector('.nav-links');
+const faqQuestions = document.querySelectorAll('.faq-q');
 let reviewIndex = 0;
 
 function animateCounters() {
@@ -122,3 +123,12 @@ if (window.gsap && window.ScrollTrigger) {
     });
   }
 }
+
+faqQuestions.forEach((button) => {
+  button.addEventListener('click', () => {
+    const item = button.closest('.faq-item');
+    if (item) {
+      item.classList.toggle('open');
+    }
+  });
+});
