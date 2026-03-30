@@ -35,6 +35,20 @@ In admin, update:
 - Policies
 - Site Settings (email, phone, WhatsApp, business name)
 
+## Run Backend + Frontend together (single command)
+
+From repo root:
+
+```bash
+chmod +x run_dev.sh
+./run_dev.sh
+```
+
+This starts:
+- Backend: `http://127.0.0.1:8000`
+- Admin: `http://127.0.0.1:8000/admin/`
+- Frontend: `http://127.0.0.1:5173`
+
 ## Run Frontend (Vite)
 
 ```bash
