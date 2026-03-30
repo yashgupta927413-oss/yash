@@ -39,6 +39,20 @@ body {
 }
 .hero-content h1 { margin: 1rem 0; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.1; max-width: 850px; }
 .lead { max-width: 760px; color: var(--muted); }
+.trust-row {
+  margin-top: .9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+}
+.trust-row span {
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.02);
+  border-radius: 999px;
+  padding: .35rem .7rem;
+  color: #c7d4f5;
+  font-size: .9rem;
+}
 
 .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.2rem; }
 .btn {
@@ -130,6 +144,28 @@ body {
 .review-card h4 { margin-bottom: .15rem; }
 .review-card span { color: var(--muted); }
 
+.google-review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.google-card {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 1rem;
+}
+.google-card .rating {
+  margin: 0 0 .4rem;
+  color: #ffd166;
+  letter-spacing: 1px;
+}
+.google-card span {
+  color: #9ab6ff;
+  font-size: .9rem;
+}
+
 .contact-box {
   border: 1px solid var(--border);
   border-radius: 1rem;
@@ -161,6 +197,7 @@ body {
   .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .module-grid { grid-template-columns: 1fr; }
+  .google-review-grid { grid-template-columns: 1fr; }
   .nav { flex-wrap: wrap; }
 }
 
