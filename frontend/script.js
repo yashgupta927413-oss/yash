@@ -258,8 +258,8 @@ function setupGsap() {
 
         ScrollTrigger.create({
           trigger: showcase,
-          start: 'top 70%',
-          end: 'bottom 30%',
+          start: 'top 72%',
+          end: 'bottom 28%',
           scrub: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
