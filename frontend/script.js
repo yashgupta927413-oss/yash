@@ -250,6 +250,32 @@ function setupGsap() {
       const mobileFrames = document.querySelectorAll('.frame');
       if (mobileFrames.length > 1) {
         let index = 0;
+        const screen = document.querySelector('.device-screen');
+        if (screen) {
+          let startX = 0;
+          screen.addEventListener(
+            'touchstart',
+            (event) => {
+              startX = event.changedTouches[0].clientX;
+            },
+            { passive: true }
+          );
+          screen.addEventListener(
+            'touchend',
+            (event) => {
+              const endX = event.changedTouches[0].clientX;
+              const delta = endX - startX;
+              if (Math.abs(delta) < 30) return;
+              if (delta < 0) {
+                index = (index + 1) % mobileFrames.length;
+              } else {
+                index = (index - 1 + mobileFrames.length) % mobileFrames.length;
+              }
+              mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
+            },
+            { passive: true }
+          );
+        }
         const showcaseObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -364,6 +390,36 @@ function setupBackToTop() {
   };
   window.addEventListener('scroll', toggle, { passive: true });
   toggle();
+}
+
+function setupImagePopup() {
+  const modal = document.getElementById('imageModal');
+  const modalPreview = document.getElementById('imageModalPreview');
+  const closeBtn = document.getElementById('imageModalClose');
+  const backdrop = document.getElementById('imageModalBackdrop');
+  if (!modal || !modalPreview) return;
+
+  const close = () => {
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    modalPreview.src = '';
+  };
+
+  closeBtn?.addEventListener('click', close);
+  backdrop?.addEventListener('click', close);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') close();
+  });
+
+  document.querySelectorAll('.service-card img').forEach((img) => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', () => {
+      modalPreview.src = img.src;
+      modalPreview.alt = img.alt || 'Service preview';
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+    });
+  });
 }
 
 function applySectionOrder(sectionOrder) {
@@ -577,6 +633,7 @@ function boot() {
   setupReviews();
   setupPolicyLinks();
   setupBackToTop();
+  setupImagePopup();
   setupCounterObserver();
   setupGsap();
 }

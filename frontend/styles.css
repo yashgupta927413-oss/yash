@@ -636,6 +636,58 @@ body {
   place-items: center;
 }
 
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  display: none;
+}
+
+.image-modal[aria-hidden='false'] {
+  display: grid;
+  place-items: center;
+}
+
+.image-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 28, 58, .58);
+}
+
+.image-modal-card {
+  position: relative;
+  width: min(840px, 94vw);
+  max-height: 86vh;
+  padding: .8rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px rgba(18, 32, 63, 0.3);
+}
+
+.image-modal-card img {
+  width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 10px;
+  display: block;
+}
+
+.image-modal-close {
+  position: absolute;
+  right: .7rem;
+  top: .45rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #f4f8ff;
+  color: #1e3a74;
+  width: 34px;
+  height: 34px;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .policy-modal-backdrop {
   position: absolute;
   inset: 0;
@@ -762,6 +814,14 @@ body.modal-open {
     width: min(92vw, 92vw);
     max-height: 72vh;
     padding: 1rem .95rem .95rem;
+  }
+  .image-modal-card {
+    width: min(94vw, 94vw);
+    max-height: 80vh;
+    padding: .6rem;
+  }
+  .image-modal-card img {
+    max-height: 72vh;
   }
   .whatsapp-float {
     right: 12px;
