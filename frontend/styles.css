@@ -180,6 +180,7 @@ body {
 .showcase-section {
   overflow: hidden;
   border-bottom: 1px solid var(--border);
+  min-height: 82vh;
 }
 
 .showcase-wrap {
@@ -582,6 +583,7 @@ body {
 
   .showcase-wrap { grid-template-columns: 1fr; }
   .glow-orb { display: none; }
+  .showcase-section { min-height: auto; }
 
   .nav { flex-wrap: wrap; }
 }
