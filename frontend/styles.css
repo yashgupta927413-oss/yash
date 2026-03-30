@@ -14,6 +14,22 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: #1f4ab0;
+  color: #fff;
+  padding: .6rem .9rem;
+  border-radius: .5rem;
+  z-index: 999;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -510,6 +526,34 @@ body {
   border-radius: 999px;
   box-shadow: 0 16px 30px rgba(0,0,0,.35);
   z-index: 10;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 74px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  font-weight: 800;
+  color: #1d3f8f;
+  background: rgba(255, 255, 255, .96);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 24px rgba(18, 32, 63, .22);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 10;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .policy-section {

@@ -1,6 +1,10 @@
 let reviewIndex = 0;
 let reviewInterval;
 let policyMap = new Map();
+const apiBase =
+  window.location.port === '5173' || window.location.hostname === 'localhost'
+    ? 'http://127.0.0.1:8000'
+    : '';
 
 function setupMenu() {
   const menuToggle = document.getElementById('menuToggle');
@@ -272,6 +276,9 @@ function setupPolicyLinks() {
   const backdrop = document.getElementById('policyModalBackdrop');
   if (closeBtn) closeBtn.onclick = closePolicyModal;
   if (backdrop) backdrop.onclick = closePolicyModal;
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closePolicyModal();
+  });
 
   document.querySelectorAll('#footerPolicyLinks a').forEach((link) => {
     link.addEventListener('click', (event) => {
@@ -286,6 +293,20 @@ function setupPolicyLinks() {
       openPolicyModal(policy.title, policy.content);
     });
   });
+}
+
+function setupBackToTop() {
+  const backToTop = document.getElementById('backToTop');
+  if (!backToTop) return;
+  const toggle = () => {
+    if (window.scrollY > 420) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  };
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
 }
 
 function setText(id, value) {
@@ -304,7 +325,7 @@ function escapeHtml(value) {
 
 async function loadAdminManagedContent() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/homepage/');
+    const response = await fetch(`${apiBase}/api/homepage/`);
     if (!response.ok) return;
     const data = await response.json();
 
@@ -475,6 +496,7 @@ function boot() {
   setupFaq();
   setupReviews();
   setupPolicyLinks();
+  setupBackToTop();
   setupCounterObserver();
   setupGsap();
 }
