@@ -206,7 +206,7 @@ body {
 .showcase-section {
   overflow: hidden;
   border-bottom: 1px solid var(--border);
-  min-height: 82vh;
+  min-height: 120vh;
 }
 
 .showcase-wrap {
@@ -232,6 +232,7 @@ body {
   overflow: hidden;
   transform-style: preserve-3d;
   will-change: transform;
+  transition: transform .18s ease-out;
 }
 
 .device-header {

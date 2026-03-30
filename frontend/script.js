@@ -326,6 +326,33 @@ function setupGsap() {
   }
 }
 
+function setupShowcaseFallback() {
+  const showcase = document.querySelector('.showcase-section');
+  const mockup = document.querySelector('.device-mockup');
+  const frames = Array.from(document.querySelectorAll('.frame'));
+  if (!showcase || !mockup || frames.length === 0) return;
+
+  const updateShowcase = () => {
+    const rect = showcase.getBoundingClientRect();
+    const viewport = window.innerHeight || 1;
+    const start = viewport * 0.2;
+    const end = viewport * -0.9;
+    const distance = start - end;
+    const progress = Math.min(1, Math.max(0, (start - rect.top) / distance));
+    const frameIndex = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+
+    frames.forEach((frame, index) => frame.classList.toggle('active', index === frameIndex));
+    const rotateY = (progress - 0.5) * 20;
+    const rotateX = (0.5 - progress) * 12;
+    const scale = 0.94 + progress * 0.06;
+    mockup.style.transform = `perspective(1200px) rotateY(${rotateY}deg) rotateX(${rotateX}deg) scale(${scale})`;
+  };
+
+  window.addEventListener('scroll', updateShowcase, { passive: true });
+  window.addEventListener('resize', updateShowcase);
+  updateShowcase();
+}
+
 function openPolicyModal(title, content) {
   const modal = document.getElementById('policyModal');
   const modalTitle = document.getElementById('policyModalTitle');
@@ -636,6 +663,9 @@ function boot() {
   setupImagePopup();
   setupCounterObserver();
   setupGsap();
+  if (!(window.gsap && window.ScrollTrigger)) {
+    setupShowcaseFallback();
+  }
 }
 
 loadAdminManagedContent().finally(() => {
