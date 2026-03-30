@@ -229,131 +229,110 @@ function setupGsap() {
     });
 
     mm.add('(max-width: 1024px)', () => {
-      const mobileFrames = gsap.utils.toArray('.frame');
-      const mobileDepthCards = gsap.utils.toArray('.depth-card');
-      const mobileOrbs = gsap.utils.toArray('.glow-orb');
-
-      if (!mobileFrames.length) return;
-
-      const setActiveFrame = (index) => {
-        mobileFrames.forEach((frame, idx) => {
-          frame.classList.toggle('active', idx === index);
-        });
-      };
-
-      setActiveFrame(0);
-
       gsap.set(mockup, {
         transformPerspective: 1200,
         transformOrigin: 'center center',
-        willChange: 'transform',
       });
 
       gsap.fromTo(
         mockup,
-        { opacity: 0, y: 40, scale: 0.92 },
+        { opacity: 0, y: 35, scale: 0.95 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 1,
+          duration: 0.8,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: showcase,
-            start: 'top 88%',
-            end: 'top 60%',
+            start: 'top 82%',
+            end: 'top 48%',
             scrub: true,
             invalidateOnRefresh: true,
           },
         }
       );
 
-      const mobileStory = gsap.timeline({
-        scrollTrigger: {
-          trigger: showcase,
-          start: 'top top',
-          end: '+=900',
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
+      const mobileFrames = document.querySelectorAll('.frame');
+      const mobileDepthCards = gsap.utils.toArray('.depth-card');
+      const mobileOrbs = gsap.utils.toArray('.glow-orb');
 
-      mobileStory
-        .to(mockup, { y: -8, scale: 1.02, rotateY: 5, rotateX: -3, duration: 1, ease: 'none' }, 0)
-        .to(mockup, { y: 6, scale: 1.01, rotateY: -5, rotateX: 3, duration: 1, ease: 'none' }, 1)
-        .to(mockup, { y: 0, scale: 1, rotateY: 0, rotateX: 0, duration: 1, ease: 'none' }, 2);
+      if (mobileFrames.length > 1) {
+        const setActiveFrame = (index) => {
+          mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
+        };
 
-      mobileDepthCards.forEach((card, i) => {
-        mobileStory.fromTo(
-          card,
-          {
-            opacity: 0,
-            y: 20 + i * 8,
-            rotate: -5 + i * 3,
+        setActiveFrame(0);
+
+        const mobileTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: showcase,
+            start: 'top 12%',
+            end: '+=700',
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
-          {
-            opacity: 1,
-            y: -12 - i * 10,
-            rotate: 4 - i * 2,
-            duration: 1.6,
-            ease: 'none',
-          },
-          0.15 + i * 0.2
-        );
-      });
+        });
 
-      mobileOrbs.forEach((orb, i) => {
-        mobileStory.to(
-          orb,
-          {
-            y: i % 2 === 0 ? -30 : 36,
-            x: i % 2 === 0 ? 16 : -14,
-            scale: 1.1,
-            duration: 2,
-            ease: 'none',
-          },
-          0
-        );
-      });
+        mobileTl
+          .to(mockup, { rotateY: 5, rotateX: -3, y: -8, scale: 1.01, duration: 1, ease: 'none' }, 0)
+          .to(mockup, { rotateY: -5, rotateX: 3, y: 6, scale: 1.01, duration: 1, ease: 'none' }, 1)
+          .to(mockup, { rotateY: 0, rotateX: 0, y: 0, scale: 1, duration: 1, ease: 'none' }, 2);
 
-      mobileStory.add(() => setActiveFrame(0), 0.15);
-      mobileStory.add(() => setActiveFrame(1), 1.05);
-      mobileStory.add(() => setActiveFrame(2), 1.95);
+        mobileDepthCards.forEach((card, i) => {
+          mobileTl.fromTo(
+            card,
+            { y: 16 + i * 6, opacity: 0, rotate: -5 + i * 3 },
+            { y: -10 - i * 8, opacity: 1, rotate: 4 - i * 2, duration: 1.2, ease: 'none' },
+            0.12 + i * 0.18
+          );
+        });
 
-      const screen = document.querySelector('.device-screen');
-      if (screen) {
-        let startX = 0;
+        mobileOrbs.forEach((orb, i) => {
+          mobileTl.to(
+            orb,
+            { y: i % 2 === 0 ? -24 : 30, x: i % 2 === 0 ? 14 : -12, scale: 1.08, duration: 2, ease: 'none' },
+            0
+          );
+        });
 
-        screen.addEventListener(
-          'touchstart',
-          (event) => {
-            startX = event.changedTouches[0].clientX;
-          },
-          { passive: true }
-        );
+        mobileTl.add(() => setActiveFrame(0), 0.15);
+        mobileTl.add(() => setActiveFrame(1), 1.05);
+        mobileTl.add(() => setActiveFrame(2), 1.9);
 
-        screen.addEventListener(
-          'touchend',
-          (event) => {
-            const endX = event.changedTouches[0].clientX;
-            const delta = endX - startX;
-            if (Math.abs(delta) < 35) return;
+        const screen = document.querySelector('.device-screen');
+        if (screen) {
+          let startX = 0;
+          screen.addEventListener(
+            'touchstart',
+            (event) => {
+              startX = event.changedTouches[0].clientX;
+            },
+            { passive: true }
+          );
+          screen.addEventListener(
+            'touchend',
+            (event) => {
+              const endX = event.changedTouches[0].clientX;
+              const delta = endX - startX;
+              if (Math.abs(delta) < 30) return;
 
-            const activeIndex = mobileFrames.findIndex((frame) => frame.classList.contains('active'));
-            let nextIndex = activeIndex < 0 ? 0 : activeIndex;
+              const activeIndex = [...mobileFrames].findIndex((frame) => frame.classList.contains('active'));
+              let nextIndex = activeIndex < 0 ? 0 : activeIndex;
 
-            if (delta < 0) {
-              nextIndex = Math.min(mobileFrames.length - 1, nextIndex + 1);
-            } else {
-              nextIndex = Math.max(0, nextIndex - 1);
-            }
+              if (delta < 0) {
+                nextIndex = Math.min(mobileFrames.length - 1, nextIndex + 1);
+              } else {
+                nextIndex = Math.max(0, nextIndex - 1);
+              }
 
-            setActiveFrame(nextIndex);
-          },
-          { passive: true }
-        );
+              setActiveFrame(nextIndex);
+            },
+            { passive: true }
+          );
+        }
       }
     });
   }
