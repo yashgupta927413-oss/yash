@@ -1,15 +1,15 @@
 :root {
-  --bg: #060b16;
-  --bg-2: #0b1222;
-  --surface: #0f182d;
-  --surface-2: #121f39;
-  --text: #eef3ff;
-  --muted: #a8b7d6;
-  --primary: #5a8fff;
-  --primary-2: #7a63ff;
+  --bg: #edf4ff;
+  --bg-2: #dfeaff;
+  --surface: #ffffff;
+  --surface-2: #f3f8ff;
+  --text: #12203f;
+  --muted: #4d618c;
+  --primary: #396dff;
+  --primary-2: #6b57ff;
   --success: #25d366;
-  --border: rgba(151, 178, 255, 0.2);
-  --shadow: 0 24px 50px rgba(1, 7, 19, 0.45);
+  --border: rgba(69, 103, 179, 0.2);
+  --shadow: 0 20px 40px rgba(31, 55, 108, 0.14);
 }
 
 * { box-sizing: border-box; }
@@ -20,9 +20,9 @@ body {
   color: var(--text);
   line-height: 1.6;
   background:
-    radial-gradient(700px 380px at 0% 0%, rgba(45, 93, 190, 0.20), transparent 60%),
-    radial-gradient(540px 320px at 100% 0%, rgba(66, 105, 194, 0.14), transparent 58%),
-    linear-gradient(180deg, #071020 0%, #0b162a 50%, #0f1d36 100%);
+    radial-gradient(780px 420px at 0% 0%, rgba(127, 170, 255, 0.35), transparent 62%),
+    radial-gradient(640px 360px at 100% 0%, rgba(178, 196, 255, 0.42), transparent 60%),
+    linear-gradient(180deg, #f6f9ff 0%, #edf4ff 44%, #e7f0ff 100%);
 }
 
 .container {
@@ -32,7 +32,7 @@ body {
 
 .hero {
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.28) 40%, transparent 100%);
 }
 
 .nav {
@@ -46,7 +46,7 @@ body {
 
 .brand {
   text-decoration: none;
-  color: #fff;
+  color: #132958;
   font-weight: 800;
   letter-spacing: .2px;
   font-size: 1.1rem;
@@ -63,8 +63,8 @@ body {
 .menu-toggle {
   display: none;
   border: 1px solid var(--border);
-  background: rgba(255,255,255,.04);
-  color: #fff;
+  background: rgba(255,255,255,.8);
+  color: #132958;
   border-radius: .55rem;
   width: 40px;
   height: 38px;
@@ -72,7 +72,7 @@ body {
 }
 
 .nav-links a {
-  color: #c8d4f2;
+  color: #3d5488;
   text-decoration: none;
   font-size: .95rem;
   padding: .32rem .52rem;
@@ -80,8 +80,8 @@ body {
 }
 
 .nav-links a:hover {
-  background: rgba(90, 143, 255, 0.18);
-  color: #fff;
+  background: rgba(90, 143, 255, 0.14);
+  color: #12203f;
 }
 
 .hero-content {
@@ -93,10 +93,10 @@ body {
   align-items: center;
   gap: .4rem;
   padding: .35rem .75rem;
-  border: 1px solid rgba(90, 143, 255, 0.45);
+  border: 1px solid rgba(57, 109, 255, 0.32);
   border-radius: 999px;
-  background: rgba(90, 143, 255, 0.15);
-  color: #c7d9ff;
+  background: rgba(57, 109, 255, 0.08);
+  color: #234282;
   font-weight: 600;
   font-size: .88rem;
 }
@@ -124,10 +124,10 @@ body {
 
 .trust-row span {
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, .03);
+  background: rgba(255, 255, 255, .74);
   border-radius: .7rem;
   padding: .55rem .7rem;
-  color: #cad9f8;
+  color: #2e4b82;
   font-size: .9rem;
 }
 
@@ -160,11 +160,11 @@ body {
 .btn-outline {
   color: var(--text);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, .02);
+  background: rgba(255, 255, 255, .86);
 }
 
 .section { padding: 4.2rem 0; }
-.section-alt { background: rgba(9, 18, 34, .72); }
+.section-alt { background: rgba(255, 255, 255, .72); }
 .section h2 {
   margin: 0;
   font-size: clamp(1.7rem, 3vw, 2.3rem);
