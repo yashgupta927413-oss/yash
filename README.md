@@ -49,6 +49,13 @@ This starts:
 - Admin: `http://127.0.0.1:8000/admin/`
 - Frontend: `http://127.0.0.1:5173`
 
+If it seems "stuck" on first run, it's usually installing dependencies.
+Use verbose mode to debug:
+
+```bash
+bash -x ./run_dev.sh
+```
+
 ## Run Frontend (Vite)
 
 ```bash
