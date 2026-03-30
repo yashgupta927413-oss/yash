@@ -568,6 +568,7 @@ body {
 }
 
 .policy-card { padding: 1rem; }
+.policy-card { cursor: pointer; }
 .policy-card h3 { margin: 0 0 .35rem; }
 .policy-card p { margin: 0; color: var(--muted); }
 
@@ -686,7 +687,9 @@ body.modal-open {
 
   .showcase-wrap { grid-template-columns: 1fr; }
   .glow-orb { display: none; }
-  .showcase-section { min-height: auto; }
+  .showcase-section { min-height: auto; padding-top: 2.4rem; }
+  .device-screen { min-height: 230px; }
+  .device-mockup { max-width: 100%; }
 
   .nav { flex-wrap: wrap; }
 }
@@ -696,6 +699,7 @@ body.modal-open {
   .hero-content { padding: 2.2rem 0 2.2rem; }
   .hero-content h1 { font-size: clamp(1.7rem, 6vw, 2.4rem); }
   .lead { font-size: 1rem; }
+  .section-text { font-size: .95rem; }
 
   .menu-toggle { display: inline-grid; place-items: center; }
   .nav-links {
@@ -732,6 +736,23 @@ body.modal-open {
   .reviews-head { flex-wrap: wrap; }
 
   .footer-wrap { flex-direction: column; align-items: flex-start; }
+  .policy-modal-card {
+    width: min(92vw, 92vw);
+    max-height: 72vh;
+    padding: 1rem .95rem .95rem;
+  }
+  .whatsapp-float {
+    right: 12px;
+    bottom: 12px;
+    padding: .72rem .9rem;
+    font-size: .9rem;
+  }
+  .back-to-top {
+    right: 12px;
+    bottom: 64px;
+    width: 38px;
+    height: 38px;
+  }
 }
 
 @media (max-width: 700px) {

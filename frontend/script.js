@@ -61,6 +61,34 @@ function setupReviews() {
   }, 6000);
 
   showReview(reviewIndex);
+
+  const reviewSlider = document.getElementById('reviewSlider');
+  if (reviewSlider) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    reviewSlider.addEventListener(
+      'touchstart',
+      (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+      },
+      { passive: true }
+    );
+    reviewSlider.addEventListener(
+      'touchend',
+      (event) => {
+        touchEndX = event.changedTouches[0].clientX;
+        const delta = touchEndX - touchStartX;
+        if (Math.abs(delta) < 35) return;
+        if (delta < 0) {
+          reviewIndex = (reviewIndex + 1) % reviewCards.length;
+        } else {
+          reviewIndex = (reviewIndex - 1 + reviewCards.length) % reviewCards.length;
+        }
+        showReview(reviewIndex);
+      },
+      { passive: true }
+    );
+  }
 }
 
 function animateCounters() {
@@ -218,6 +246,26 @@ function setupGsap() {
           },
         }
       );
+
+      const mobileFrames = document.querySelectorAll('.frame');
+      if (mobileFrames.length > 1) {
+        let index = 0;
+        const showcaseObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              showcaseObserver.unobserve(entry.target);
+              const interval = setInterval(() => {
+                index = (index + 1) % mobileFrames.length;
+                mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
+              }, 2200);
+              setTimeout(() => clearInterval(interval), 9000);
+            });
+          },
+          { threshold: 0.4 }
+        );
+        showcaseObserver.observe(showcase);
+      }
     });
   }
 
@@ -290,6 +338,15 @@ function setupPolicyLinks() {
       event.preventDefault();
       const target = document.getElementById(`policy-${key}`);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openPolicyModal(policy.title, policy.content);
+    });
+  });
+
+  document.querySelectorAll('#policyCards .policy-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = card.id.replace('policy-', '');
+      const policy = policyMap.get(id);
+      if (!policy) return;
       openPolicyModal(policy.title, policy.content);
     });
   });
