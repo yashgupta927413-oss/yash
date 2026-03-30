@@ -30,6 +30,8 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 echo "==> Running backend migrations..."
 python manage.py migrate
+echo "==> Ensuring default admin credentials (admin/admin)..."
+python manage.py shell -c "from django.contrib.auth import get_user_model; User=get_user_model(); u, created = User.objects.get_or_create(username='admin', defaults={'email': 'admin@localhost', 'is_staff': True, 'is_superuser': True}); u.is_staff=True; u.is_superuser=True; u.set_password('admin'); u.save(); print('Default admin ready: username=admin password=admin')"
 
 cd "$FRONTEND_DIR"
 if [ ! -d "node_modules" ]; then

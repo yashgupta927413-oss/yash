@@ -25,17 +25,27 @@ Django API endpoint:
 
 ```bash
 python manage.py migrate
-python manage.py createsuperuser
 python manage.py runserver
 ```
 
 Open:
 - `http://127.0.0.1:8000/admin/`
 
+Default login created by `./run_dev.sh`:
+- Username: `admin`
+- Password: `admin`
+
+If you run backend manually and need to create/update that same default admin:
+
+```bash
+python manage.py shell -c "from django.contrib.auth import get_user_model; User=get_user_model(); u, _ = User.objects.get_or_create(username='admin', defaults={'email': 'admin@localhost', 'is_staff': True, 'is_superuser': True}); u.is_staff=True; u.is_superuser=True; u.set_password('admin'); u.save()"
+```
+
 In admin, update:
 - FAQs
 - Policies
 - Site Settings (email, phone, WhatsApp, business name)
+- Users (change username/password anytime)
 
 ## Run Backend + Frontend together (single command)
 
