@@ -217,3 +217,52 @@ if (serviceCardsFallback.length > 0) {
 
   serviceCardsFallback.forEach((card) => serviceObserver.observe(card));
 }
+
+async function loadAdminManagedContent() {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/homepage/');
+    if (!response.ok) return;
+    const data = await response.json();
+
+    if (Array.isArray(data.faqs) && data.faqs.length > 0) {
+      const faqContainer = document.getElementById('faqContainer');
+      if (faqContainer) {
+        faqContainer.innerHTML = `<h2>Frequently Asked Questions</h2>${data.faqs
+          .map(
+            (faq) => `\n<div class=\"faq-item\">\n<button class=\"faq-q\">${faq.question}</button>\n<p class=\"faq-a\">${faq.answer}</p>\n</div>`
+          )
+          .join('')}`;
+
+        faqContainer.querySelectorAll('.faq-q').forEach((button) => {
+          button.addEventListener('click', () => {
+            const item = button.closest('.faq-item');
+            if (item) item.classList.toggle('open');
+          });
+        });
+      }
+    }
+
+    if (Array.isArray(data.policies) && data.policies.length > 0) {
+      const policyCards = document.getElementById('policyCards');
+      if (policyCards) {
+        policyCards.innerHTML = data.policies
+          .map(
+            (policy) =>
+              `<article class=\"policy-card\"><h3>${policy.title}</h3><p>${policy.content}</p></article>`
+          )
+          .join('');
+      }
+
+      const footerPolicyLinks = document.getElementById('footerPolicyLinks');
+      if (footerPolicyLinks) {
+        footerPolicyLinks.innerHTML = data.policies
+          .map((policy) => `<a href=\"#\">${policy.title}</a>`)
+          .join('');
+      }
+    }
+  } catch (_error) {
+    // keep static content if API is unavailable
+  }
+}
+
+loadAdminManagedContent();

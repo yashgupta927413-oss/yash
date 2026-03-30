@@ -19,6 +19,22 @@ python manage.py runserver
 Django API endpoint:
 - `http://127.0.0.1:8000/api/homepage/`
 
+### Admin Panel (Manage FAQ / Policies / Settings)
+
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+Open:
+- `http://127.0.0.1:8000/admin/`
+
+In admin, update:
+- FAQs
+- Policies
+- Site Settings (email, phone, WhatsApp, business name)
+
 ## Run Frontend (Vite)
 
 ```bash
