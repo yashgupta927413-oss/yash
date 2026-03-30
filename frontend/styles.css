@@ -217,8 +217,8 @@ body {
   width: min(430px, 100%);
   border-radius: 1.2rem;
   border: 1px solid var(--border);
-  background: linear-gradient(170deg, #1a2a4f, #101c34);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, .45);
+  background: linear-gradient(170deg, #f7fbff, #e6efff);
+  box-shadow: 0 24px 50px rgba(32, 65, 135, .22);
   overflow: hidden;
   transform-style: preserve-3d;
   will-change: transform;
@@ -228,14 +228,14 @@ body {
   display: flex;
   gap: .35rem;
   padding: .7rem .8rem;
-  border-bottom: 1px solid rgba(255,255,255,.14);
+  border-bottom: 1px solid rgba(41, 78, 160, .18);
 }
 
 .device-header span {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255,255,255,.55);
+  background: rgba(45, 84, 171, .45);
 }
 
 .device-screen {
@@ -257,15 +257,15 @@ body {
 
 .frame.active { display: grid; }
 .frame h3 { margin: 0; font-size: 1.35rem; }
-.frame p { margin: 0; color: #d5def7; }
+.frame p { margin: 0; color: #4a6498; }
 
 .depth-card {
   position: absolute;
   padding: .35rem .58rem;
-  border: 1px solid rgba(255,255,255,.24);
+  border: 1px solid rgba(45, 84, 171, .24);
   border-radius: .6rem;
-  background: rgba(255,255,255,.1);
-  color: #f5f8ff;
+  background: rgba(255,255,255,.76);
+  color: #2950a3;
   font-size: .78rem;
   font-weight: 700;
   backdrop-filter: blur(4px);
@@ -287,12 +287,12 @@ body {
 .orb-1 {
   left: 10%;
   top: 10%;
-  background: radial-gradient(circle, rgba(90,143,255,.85) 0%, rgba(90,143,255,.15) 70%);
+  background: radial-gradient(circle, rgba(90,143,255,.55) 0%, rgba(90,143,255,.08) 70%);
 }
 .orb-2 {
   right: 6%;
   bottom: 4%;
-  background: radial-gradient(circle, rgba(122,99,255,.85) 0%, rgba(122,99,255,.15) 70%);
+  background: radial-gradient(circle, rgba(122,99,255,.48) 0%, rgba(122,99,255,.08) 70%);
 }
 
 .stats-grid {
