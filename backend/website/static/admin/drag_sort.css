@@ -1,0 +1,19 @@
+.drag-handle {
+  cursor: grab;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #2f6bff;
+  user-select: none;
+}
+
+.dragging-row {
+  opacity: 0.45;
+}
+
+#result_list tbody tr {
+  transition: background-color .15s ease;
+}
+
+#result_list tbody tr:hover {
+  background: #edf3ff;
+}
