@@ -1,5 +1,6 @@
 let reviewIndex = 0;
 let reviewInterval;
+let policyMap = new Map();
 
 function setupMenu() {
   const menuToggle = document.getElementById('menuToggle');
@@ -247,6 +248,46 @@ function setupGsap() {
   }
 }
 
+function openPolicyModal(title, content) {
+  const modal = document.getElementById('policyModal');
+  const modalTitle = document.getElementById('policyModalTitle');
+  const modalBody = document.getElementById('policyModalBody');
+  if (!modal || !modalTitle || !modalBody) return;
+
+  modalTitle.textContent = title;
+  modalBody.textContent = content;
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+}
+
+function closePolicyModal() {
+  const modal = document.getElementById('policyModal');
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
+
+function setupPolicyLinks() {
+  const closeBtn = document.getElementById('policyModalClose');
+  const backdrop = document.getElementById('policyModalBackdrop');
+  if (closeBtn) closeBtn.onclick = closePolicyModal;
+  if (backdrop) backdrop.onclick = closePolicyModal;
+
+  document.querySelectorAll('#footerPolicyLinks a').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const href = link.getAttribute('href');
+      if (!href || !href.startsWith('#policy-')) return;
+      const key = href.replace('#policy-', '');
+      const policy = policyMap.get(key);
+      if (!policy) return;
+      event.preventDefault();
+      const target = document.getElementById(`policy-${key}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openPolicyModal(policy.title, policy.content);
+    });
+  });
+}
+
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el && value) el.textContent = value;
@@ -375,17 +416,19 @@ async function loadAdminManagedContent() {
     }
 
     if (Array.isArray(data.policies) && data.policies.length > 0) {
+      policyMap = new Map();
+      data.policies.forEach((policy) => policyMap.set(policy.policy_type, policy));
       const policyCards = document.getElementById('policyCards');
       if (policyCards) {
         policyCards.innerHTML = data.policies
-          .map((policy) => `<article class="policy-card"><h3>${escapeHtml(policy.title)}</h3><p>${escapeHtml(policy.content)}</p></article>`)
+          .map((policy) => `<article class="policy-card" id="policy-${escapeHtml(policy.policy_type)}" data-policy-title="${escapeHtml(policy.title)}" data-policy-content="${escapeHtml(policy.content)}"><h3>${escapeHtml(policy.title)}</h3><p>${escapeHtml(policy.content)}</p></article>`)
           .join('');
       }
 
       const footerPolicyLinks = document.getElementById('footerPolicyLinks');
       if (footerPolicyLinks) {
         footerPolicyLinks.innerHTML = data.policies
-          .map((policy) => `<a href="#">${escapeHtml(policy.title)}</a>`)
+          .map((policy) => `<a href="#policy-${escapeHtml(policy.policy_type)}">${escapeHtml(policy.title)}</a>`)
           .join('');
       }
     }
@@ -421,9 +464,17 @@ async function loadAdminManagedContent() {
 }
 
 function boot() {
+  document.querySelectorAll('#policyCards .policy-card').forEach((card) => {
+    const id = card.id.replace('policy-', '');
+    policyMap.set(id, {
+      title: card.dataset.policyTitle || card.querySelector('h3')?.textContent || 'Policy',
+      content: card.dataset.policyContent || card.querySelector('p')?.textContent || '',
+    });
+  });
   setupMenu();
   setupFaq();
   setupReviews();
+  setupPolicyLinks();
   setupCounterObserver();
   setupGsap();
 }

@@ -398,17 +398,17 @@
       WhatsApp Chat
     </a>
 
-    <section class="section policy-section">
+    <section class="section policy-section" id="policies">
       <div class="container policy-grid" id="policyCards">
-        <article class="policy-card">
+        <article class="policy-card" id="policy-privacy" data-policy-title="Privacy Policy" data-policy-content="We protect client and lead data with secure handling practices and role-based access.">
           <h3>Privacy Policy</h3>
           <p>We protect client and lead data with secure handling practices and role-based access.</p>
         </article>
-        <article class="policy-card">
+        <article class="policy-card" id="policy-terms" data-policy-title="Terms of Service" data-policy-content="Project scope, timelines, deliverables, and payment terms are documented before kickoff.">
           <h3>Terms of Service</h3>
           <p>Project scope, timelines, deliverables, and payment terms are documented before kickoff.</p>
         </article>
-        <article class="policy-card">
+        <article class="policy-card" id="policy-refund" data-policy-title="Refund & Replacement Policy" data-policy-content="For pay-per-lead models, lead quality criteria and replacement conditions are pre-agreed.">
           <h3>Refund & Replacement Policy</h3>
           <p>For pay-per-lead models, lead quality criteria and replacement conditions are pre-agreed.</p>
         </article>
@@ -419,15 +419,24 @@
       <div class="container footer-wrap">
         <p>© 2026 <span id="footerBrandName">Yash Gupta</span> · Digital Marketing & IT Services</p>
         <div class="footer-links" id="footerPolicyLinks">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms</a>
-          <a href="#">Refund Policy</a>
-          <a href="#">Cookie Policy</a>
-          <a href="#">Disclaimer</a>
+          <a href="#policy-privacy">Privacy Policy</a>
+          <a href="#policy-terms">Terms</a>
+          <a href="#policy-refund">Refund Policy</a>
+          <a href="#policy-cookie">Cookie Policy</a>
+          <a href="#policy-disclaimer">Disclaimer</a>
           <a href="mailto:yash@theyashgupta.com">Support</a>
         </div>
       </div>
     </footer>
+
+    <div class="policy-modal" id="policyModal" aria-hidden="true">
+      <div class="policy-modal-backdrop" id="policyModalBackdrop"></div>
+      <article class="policy-modal-card" role="dialog" aria-modal="true" aria-labelledby="policyModalTitle">
+        <button class="policy-modal-close" id="policyModalClose" aria-label="Close policy">×</button>
+        <h3 id="policyModalTitle">Policy</h3>
+        <p id="policyModalBody"></p>
+      </article>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
