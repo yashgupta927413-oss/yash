@@ -1,6 +1,7 @@
 let reviewIndex = 0;
 let reviewInterval;
 let policyMap = new Map();
+
 const apiBase =
   window.location.port === '5173' || window.location.hostname === 'localhost'
     ? 'http://127.0.0.1:8000'
@@ -229,6 +230,15 @@ function setupGsap() {
     });
 
     mm.add('(max-width: 1024px)', () => {
+      const mobileFrames = document.querySelectorAll('.frame');
+      const mobileDepthCards = gsap.utils.toArray('.depth-card');
+      const mobileOrbs = gsap.utils.toArray('.glow-orb');
+
+      gsap.set(mockup, {
+        transformPerspective: 1200,
+        transformOrigin: 'center center',
+      });
+
       gsap.fromTo(
         mockup,
         { opacity: 0, y: 35, scale: 0.95 },
@@ -240,16 +250,75 @@ function setupGsap() {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: showcase,
-            start: 'top 78%',
-            end: 'top 45%',
+            start: 'top 85%',
+            end: 'top 55%',
             scrub: true,
+            invalidateOnRefresh: true,
           },
         }
       );
 
-      const mobileFrames = document.querySelectorAll('.frame');
-      if (mobileFrames.length > 1) {
-        let index = 0;
+      const mobileTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: showcase,
+          start: 'top 75%',
+          end: 'bottom 25%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      mobileTl
+        .to(mockup, { rotateY: 6, rotateX: -4, y: -10, duration: 1, ease: 'none' }, 0)
+        .to(mockup, { rotateY: -6, rotateX: 4, y: 10, duration: 1, ease: 'none' }, 1)
+        .to(mockup, { rotateY: 0, rotateX: 0, y: 0, duration: 1, ease: 'none' }, 2);
+
+      mobileDepthCards.forEach((card, i) => {
+        mobileTl.fromTo(
+          card,
+          { y: 18 + i * 6, opacity: 0, rotate: -6 + i * 3 },
+          { y: -10 - i * 8, opacity: 1, rotate: 4 - i * 2, duration: 1.4, ease: 'none' },
+          0.15 + i * 0.22
+        );
+      });
+
+      mobileOrbs.forEach((orb, i) => {
+        mobileTl.to(
+          orb,
+          { y: i % 2 === 0 ? -25 : 35, x: i % 2 === 0 ? 18 : -16, scale: 1.08, duration: 2, ease: 'none' },
+          0
+        );
+      });
+
+      if (mobileFrames.length > 0) {
+        const setActiveFrame = (index) => {
+          mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
+        };
+
+        setActiveFrame(0);
+
+        ScrollTrigger.create({
+          trigger: showcase,
+          start: 'top 75%',
+          end: 'bottom 25%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            let index = 0;
+
+            if (progress < 0.34) {
+              index = 0;
+            } else if (progress < 0.67) {
+              index = 1;
+            } else {
+              index = 2;
+            }
+
+            setActiveFrame(index);
+          },
+        });
+
         const screen = document.querySelector('.device-screen');
         if (screen) {
           let startX = 0;
@@ -260,37 +329,28 @@ function setupGsap() {
             },
             { passive: true }
           );
+
           screen.addEventListener(
             'touchend',
             (event) => {
               const endX = event.changedTouches[0].clientX;
               const delta = endX - startX;
               if (Math.abs(delta) < 30) return;
+
+              const activeIndex = [...mobileFrames].findIndex((frame) => frame.classList.contains('active'));
+              let nextIndex = activeIndex < 0 ? 0 : activeIndex;
+
               if (delta < 0) {
-                index = (index + 1) % mobileFrames.length;
+                nextIndex = Math.min(mobileFrames.length - 1, nextIndex + 1);
               } else {
-                index = (index - 1 + mobileFrames.length) % mobileFrames.length;
+                nextIndex = Math.max(0, nextIndex - 1);
               }
-              mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
+
+              setActiveFrame(nextIndex);
             },
             { passive: true }
           );
         }
-        const showcaseObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              showcaseObserver.unobserve(entry.target);
-              const interval = setInterval(() => {
-                index = (index + 1) % mobileFrames.length;
-                mobileFrames.forEach((frame, idx) => frame.classList.toggle('active', idx === index));
-              }, 2200);
-              setTimeout(() => clearInterval(interval), 9000);
-            });
-          },
-          { threshold: 0.4 }
-        );
-        showcaseObserver.observe(showcase);
       }
     });
   }
@@ -655,6 +715,7 @@ function boot() {
       content: card.dataset.policyContent || card.querySelector('p')?.textContent || '',
     });
   });
+
   setupMenu();
   setupFaq();
   setupReviews();
@@ -663,10 +724,23 @@ function boot() {
   setupImagePopup();
   setupCounterObserver();
   setupGsap();
+
   if (!(window.gsap && window.ScrollTrigger)) {
     setupShowcaseFallback();
   }
 }
+
+window.addEventListener('load', () => {
+  if (window.ScrollTrigger) {
+    ScrollTrigger.refresh();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (window.ScrollTrigger) {
+    ScrollTrigger.refresh();
+  }
+});
 
 loadAdminManagedContent().finally(() => {
   boot();
