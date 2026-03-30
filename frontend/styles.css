@@ -328,11 +328,14 @@ body {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: .95rem;
   margin-top: 1rem;
+  perspective: 1200px;
 }
 
 .service-card {
   overflow: hidden;
   transition: transform .2s ease, box-shadow .2s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .service-card:hover {
@@ -345,6 +348,8 @@ body {
   height: 190px;
   object-fit: cover;
   display: block;
+  transition: transform .45s ease;
+  transform-origin: center;
 }
 
 .service-card h3 { margin: .9rem 1rem .2rem; }

@@ -87,6 +87,7 @@ if (window.gsap && window.ScrollTrigger) {
   const frames = gsap.utils.toArray('.frame');
   const depthCards = gsap.utils.toArray('.depth-card');
   const orbs = gsap.utils.toArray('.glow-orb');
+  const serviceCards = gsap.utils.toArray('.service-stack-3d .service-card');
 
   if (showcase && mockup && frames.length > 0) {
     gsap.fromTo(
@@ -146,6 +147,42 @@ if (window.gsap && window.ScrollTrigger) {
         frames.forEach((item) => item.classList.remove('active'));
         frame.classList.add('active');
       }, index * 0.8);
+    });
+  }
+
+  if (serviceCards.length > 0) {
+    gsap.fromTo(
+      serviceCards,
+      { opacity: 0, y: 70, rotateX: -18, rotateY: 8, scale: 0.88 },
+      {
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+        rotateY: 0,
+        scale: 1,
+        ease: 'back.out(1.35)',
+        stagger: 0.12,
+        duration: 1.1,
+        scrollTrigger: {
+          trigger: '.service-stack-3d',
+          start: 'top 78%',
+          end: 'top 35%',
+          scrub: false,
+        },
+      }
+    );
+
+    serviceCards.forEach((card) => {
+      const image = card.querySelector('img');
+      if (!image) return;
+
+      card.addEventListener('mouseenter', () => {
+        gsap.to(image, { scale: 1.12, duration: 0.45, ease: 'power2.out' });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        gsap.to(image, { scale: 1, duration: 0.45, ease: 'power2.out' });
+      });
     });
   }
 }
