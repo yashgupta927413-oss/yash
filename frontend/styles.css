@@ -192,6 +192,8 @@ body {
 .device-stage {
   display: flex;
   justify-content: center;
+  position: relative;
+  perspective: 1200px;
 }
 
 .device-mockup {
@@ -201,6 +203,8 @@ body {
   background: linear-gradient(170deg, #1a2a4f, #101c34);
   box-shadow: 0 30px 60px rgba(0, 0, 0, .45);
   overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .device-header {
@@ -221,6 +225,8 @@ body {
   min-height: 280px;
   padding: 1rem;
   display: grid;
+  position: relative;
+  overflow: hidden;
 }
 
 .frame {
@@ -228,11 +234,49 @@ body {
   align-content: center;
   gap: .35rem;
   animation: fadeIn .35s ease;
+  position: relative;
+  z-index: 3;
 }
 
 .frame.active { display: grid; }
 .frame h3 { margin: 0; font-size: 1.35rem; }
 .frame p { margin: 0; color: #d5def7; }
+
+.depth-card {
+  position: absolute;
+  padding: .35rem .58rem;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: .6rem;
+  background: rgba(255,255,255,.1);
+  color: #f5f8ff;
+  font-size: .78rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+.depth-card-1 { top: 18px; right: 20px; }
+.depth-card-2 { top: 74px; left: 16px; }
+.depth-card-3 { bottom: 20px; right: 24px; }
+
+.glow-orb {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: .55;
+  z-index: 1;
+}
+.orb-1 {
+  left: 10%;
+  top: 10%;
+  background: radial-gradient(circle, rgba(90,143,255,.85) 0%, rgba(90,143,255,.15) 70%);
+}
+.orb-2 {
+  right: 6%;
+  bottom: 4%;
+  background: radial-gradient(circle, rgba(122,99,255,.85) 0%, rgba(122,99,255,.15) 70%);
+}
 
 .stats-grid {
   display: grid;
@@ -518,6 +562,7 @@ body {
   }
 
   .showcase-wrap { grid-template-columns: 1fr; }
+  .glow-orb { display: none; }
 
   .nav { flex-wrap: wrap; }
 }
