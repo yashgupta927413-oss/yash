@@ -244,3 +244,57 @@ button:hover {
     padding-top: 2.5rem;
   }
 }
+
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.secondary-btn {
+  width: auto;
+  padding: 0.55rem 0.85rem;
+  background: #e7edff;
+  color: #1f3e9f;
+  border: 1px solid #bcc9ef;
+}
+
+.secondary-btn:hover {
+  background: #dbe5ff;
+}
+
+.panel-note {
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.6rem;
+}
+
+th,
+td {
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  padding: 0.65rem 0.5rem;
+  font-size: 0.92rem;
+  vertical-align: top;
+}
+
+th {
+  color: #25365f;
+  font-weight: 700;
+}
+
+.empty-row td {
+  color: var(--muted);
+  font-style: italic;
+}

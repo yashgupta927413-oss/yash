@@ -124,6 +124,31 @@
         <button type="submit">Submit Application</button>
         <p id="form-status" role="status" aria-live="polite"></p>
       </form>
+
+      <section class="card reveal" id="submissions-panel" aria-label="Recent submissions">
+        <div class="panel-head">
+          <h2>Recent Submissions (This Browser)</h2>
+          <button type="button" id="downloadSubmissions" class="secondary-btn">Download JSON</button>
+        </div>
+        <p class="panel-note">
+          This panel helps you immediately view submitted details during testing.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Position</th>
+                <th>Additional Details</th>
+                <th>Submitted At</th>
+              </tr>
+            </thead>
+            <tbody id="submissionsBody"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <script src="script.js"></script>
