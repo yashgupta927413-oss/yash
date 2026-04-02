@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WFH Job Application</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+    <header class="hero">
+      <nav class="top-nav container">
+        <span class="brand">RemoteHire</span>
+        <a class="nav-btn" href="#application">Apply Now</a>
+      </nav>
+
+      <div class="container hero-content reveal">
+        <p class="eyebrow">Remote Opportunity</p>
+        <h1>Work-From-Home Job Application</h1>
+        <p class="subtitle">
+          Submit your profile for our WFH position through a simple, professional application
+          process.
+        </p>
+        <a class="primary-cta" href="#application">Start Application</a>
+      </div>
+    </header>
+
+    <main class="container main-content" id="application">
+      <section class="info-grid reveal" aria-label="Application highlights">
+        <article class="info-card">
+          <h2>Simple Process</h2>
+          <p>Complete your details in one form and submit in minutes.</p>
+        </article>
+        <article class="info-card">
+          <h2>Mobile Friendly</h2>
+          <p>Designed to work smoothly on phone, tablet, and desktop devices.</p>
+        </article>
+        <article class="info-card">
+          <h2>Additional Details</h2>
+          <p>You can add extra requested information in the final section.</p>
+        </article>
+      </section>
+
+      <form id="application-form" class="card reveal" novalidate>
+        <h2>Application Form</h2>
+
+        <div class="grid-two">
+          <div>
+            <label for="fullName">Full name</label>
+            <input id="fullName" name="fullName" type="text" required minlength="2" />
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+        </div>
+
+        <div class="grid-two">
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" required />
+          </div>
+
+          <div>
+            <label for="position">Position applying for</label>
+            <input id="position" name="position" type="text" required />
+          </div>
+        </div>
+
+        <label for="experience">Relevant experience</label>
+        <textarea id="experience" name="experience" rows="4" required></textarea>
+
+        <div class="grid-two">
+          <div>
+            <label for="portfolio">Portfolio / LinkedIn URL</label>
+            <input id="portfolio" name="portfolio" type="url" placeholder="https://" />
+          </div>
+
+          <div>
+            <label for="availability">Availability</label>
+            <select id="availability" name="availability" required>
+              <option value="">Select availability</option>
+              <option>Immediately</option>
+              <option>Within 2 weeks</option>
+              <option>Within 1 month</option>
+            </select>
+          </div>
+        </div>
+
+        <section class="additional-box">
+          <h3>Final Step: Additional Details</h3>
+          <p>
+            If additional details were requested, select “Yes” and provide them below. Reference:
+            <a href="https://www.ycvgd.com/yvctrt" target="_blank" rel="noopener noreferrer"
+              >www.ycvgd.com/yvctrt</a
+            >
+          </p>
+
+          <label for="addDetailsChoice">Do you want to add additional requested details?</label>
+          <select id="addDetailsChoice" name="addDetailsChoice">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+
+          <div id="extraDetailsWrap" class="hidden">
+            <label for="extraDetails">Additional details</label>
+            <textarea
+              id="extraDetails"
+              name="extraDetails"
+              rows="4"
+              placeholder="Enter any additional requested details here"
+            ></textarea>
+          </div>
+        </section>
+
+        <button type="submit">Submit Application</button>
+        <p id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
