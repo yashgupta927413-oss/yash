@@ -41,7 +41,7 @@
           "@id": "https://theyashgupta.com/#person",
           "name": "Yash Gupta",
           "url": "https://theyashgupta.com/",
-          "image": "https://theyashgupta.com/yash.jpg",
+          "image": "https://theyashgupta.com/og-image.png",
           "sameAs": [
             "https://wa.me/919696345822"
           ],
@@ -231,7 +231,7 @@
               "name": "Do you offer monthly retainers or only fixed-scope projects?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Both. Fixed-scope projects are billed 50/50 (deposit + launch). Retainers run monthly with two sprint cycles and can be cancelled with 14 days notice."
+                "text": "Both, plus subscriptions. Website plans start at Rs 429/month and cancel with 30 days notice. SEO and performance-marketing retainers run month to month and cancel with 14 days notice. Fixed-scope builds are billed 50/50 — deposit on kickoff, balance on launch."
               }
             },
             {
@@ -281,7 +281,7 @@
     <nav class="topnav" id="topnav">
       <div class="topnav-inner">
         <a class="brand" href="#top" aria-label="Home">
-          <img src="/logo.svg?v=4" alt="theyashgupta" class="brand-logo" />
+          <img src="/logo.svg?v=4" alt="theyashgupta" class="brand-logo" width="150" height="30" />
         </a>
         <ul class="nav-links" id="navLinks">
           <li><a href="#plans">Plans</a></li>
@@ -1173,7 +1173,7 @@
                 <span class="faq-icon" aria-hidden="true">+</span>
               </summary>
               <div class="faq-body">
-                <p>Both. Fixed-scope is billed 50/50 — deposit on kickoff, balance on launch. Retainers run monthly with two sprint cycles and can be cancelled with 14 days' notice. Pay-per-lead is available for select industries.</p>
+                <p>Three ways, actually. <strong>Website subscriptions</strong> start at ₹429/month (or annually) and cancel with 30 days' notice. <strong>SEO and performance-marketing retainers</strong> run month to month and cancel with 14 days' notice. <strong>Fixed-scope builds</strong> are billed 50/50 — deposit on kickoff, balance on launch. Pay-per-lead is available for select industries.</p>
               </div>
             </details>
 
@@ -1409,7 +1409,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-brand">
-          <img src="/logo.svg?v=4" alt="theyashgupta" />
+          <img src="/logo.svg?v=4" alt="theyashgupta" width="140" height="28" />
           <p>Engineering websites and growth systems for ambitious teams.</p>
         </div>
         <div class="footer-cols">
@@ -1468,7 +1468,10 @@
             </svg>
           </button>
         </header>
-        <div class="policy-modal-body" id="policyModalBody">
+        <!-- data-lenis-prevent: Lenis intercepts wheel/touch on the document and
+             calls preventDefault, which kills scrolling inside overlays. Without
+             it this panel is unscrollable on touch devices. -->
+        <div class="policy-modal-body" id="policyModalBody" data-lenis-prevent>
           <!-- content injected by JS -->
         </div>
       </article>
@@ -1492,7 +1495,8 @@
           </button>
         </header>
 
-        <div class="sub-modal-body">
+        <!-- data-lenis-prevent — see the note on .policy-modal-body above. -->
+        <div class="sub-modal-body" data-lenis-prevent>
           <form class="sub-form" id="subForm" novalidate>
             <div class="form-row split">
               <label class="field">

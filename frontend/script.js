@@ -414,7 +414,7 @@ const POLICIES = {
     `,
   },
   terms: {
-    eyebrow: "Last updated · May 2026",
+    eyebrow: "Last updated · July 2026",
     title: "Terms of Service",
     body: `
       <p>By engaging <strong>theyashgupta.com</strong> for web development, performance, SEO, or paid-media services, you agree to the following terms.</p>
@@ -424,6 +424,7 @@ const POLICIES = {
 
       <h3>2. Payments</h3>
       <ul>
+        <li>Website subscriptions: billed monthly or annually in advance; no setup fee; cancellable with 30 days' notice.</li>
         <li>Fixed-scope projects: 50% deposit on kickoff, balance on launch.</li>
         <li>Retainers: billed monthly in advance; cancellable with 14 days' notice.</li>
         <li>Pay-per-lead: invoiced weekly based on validated leads.</li>
@@ -447,32 +448,40 @@ const POLICIES = {
     `,
   },
   refund: {
-    eyebrow: "Last updated · May 2026",
+    eyebrow: "Last updated · July 2026",
     title: "Refund & Cancellation Policy",
     body: `
       <p>We aim for clear scope and fair outcomes. This policy explains how cancellations and refunds work across our engagement models.</p>
 
-      <h3>1. Fixed-scope projects</h3>
+      <h3>1. Website subscriptions</h3>
+      <ul>
+        <li>Plans are billed monthly or annually in advance. There is no setup fee and no lock-in period.</li>
+        <li>Cancel any time with 30 days' written notice — your site stays live through the end of the period you have already paid for.</li>
+        <li>Part-months and unused time on an annual plan are not refunded.</li>
+        <li>Hosting, SSL, and included domain renewals stop at the end of the notice period.</li>
+      </ul>
+
+      <h3>2. Fixed-scope projects</h3>
       <ul>
         <li>The 50% kickoff deposit is non-refundable once project planning has begun.</li>
         <li>If work is cancelled mid-project, fees are pro-rated to the milestones completed.</li>
         <li>Completed assets (designs, code, configs) are delivered after pro-rata settlement.</li>
       </ul>
 
-      <h3>2. Monthly retainers</h3>
+      <h3>3. Monthly retainers</h3>
       <ul>
         <li>Cancellable with 14 days' written notice — billing stops at the end of the current cycle.</li>
         <li>Unused retainer hours do not roll over and are not refundable.</li>
       </ul>
 
-      <h3>3. Pay-per-lead engagements</h3>
+      <h3>4. Pay-per-lead engagements</h3>
       <ul>
         <li>Lead-quality criteria are defined in writing before campaigns launch.</li>
         <li>Leads failing the agreed criteria (wrong country, fake number, spam) are replaced free of charge.</li>
         <li>Refunds are not issued for delivered, qualifying leads.</li>
       </ul>
 
-      <h3>4. How to request</h3>
+      <h3>5. How to request</h3>
       <p>Email <a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a> with your invoice reference and reason. We respond within 5 business days.</p>
     `,
   },
@@ -523,6 +532,36 @@ const POLICIES = {
   },
 };
 
+/* --------------------------------------------------- Modal focus trap
+   Both modals declare aria-modal="true", which promises the rest of the page is
+   inert. Without this, Tab walks straight out of the dialog into the 80+
+   focusable elements behind the overlay — the keyboard user loses the modal
+   with no way back. Call from each modal's keydown handler. */
+function trapFocus(container, e) {
+  if (e.key !== "Tab") return;
+  const items = [
+    ...container.querySelectorAll(
+      "a[href], button, input, select, textarea, [tabindex]"
+    ),
+  ].filter(
+    (el) =>
+      !el.disabled &&
+      el.tabIndex >= 0 && // skips the off-screen honeypot (tabindex="-1")
+      (el.offsetParent !== null || el.getClientRects().length)
+  );
+  if (!items.length) return;
+
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
 function initPolicyModal() {
   const modal = document.getElementById("policyModal");
   const card = document.getElementById("policyModalCard");
@@ -569,7 +608,9 @@ function initPolicyModal() {
   closeBtn?.addEventListener("click", close);
   backdrop?.addEventListener("click", close);
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    if (!modal.classList.contains("is-open")) return;
+    if (e.key === "Escape") close();
+    else trapFocus(card, e);
   });
 }
 
@@ -872,7 +913,9 @@ function initSubscriptionModal() {
   closeBtn?.addEventListener("click", close);
   backdrop?.addEventListener("click", close);
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    if (!modal.classList.contains("is-open")) return;
+    if (e.key === "Escape") close();
+    else trapFocus(modal.querySelector(".sub-modal-card"), e);
   });
 }
 
