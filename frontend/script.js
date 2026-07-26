@@ -379,164 +379,32 @@ function initMetricsPop() {
 
 /* --------------------------------------------------- Policy Modal (Apple pop) */
 
-const POLICIES = {
-  privacy: {
-    eyebrow: "Last updated · May 2026",
-    title: "Privacy Policy",
-    body: `
-      <p>This Privacy Policy explains how <strong>theyashgupta.com</strong> ("we", "us") collects, uses, and protects information you provide when interacting with this website and our services.</p>
+/* --------------------------------------------------- Policy documents
+   The seven policy bodies live in /policies.json, not in this bundle: together
+   they are ~34 KB of legal copy that most visitors never open. Fetched once, on
+   the first request for any policy, then cached for the session.
+   Edit them via frontend/policies.build.py, which regenerates the JSON. */
 
-      <h3>1. Information we collect</h3>
-      <ul>
-        <li><strong>Contact details</strong> you submit via forms, email, phone, or WhatsApp (name, email, phone, company, project brief).</li>
-        <li><strong>Usage data</strong> collected automatically by our analytics tools (pages viewed, referrer, device type, approximate location, anonymised IP).</li>
-        <li><strong>Marketing data</strong> when you click through ads or email campaigns we run on your behalf.</li>
-      </ul>
+let POLICIES = null;
+let policiesPromise = null;
 
-      <h3>2. How we use it</h3>
-      <ul>
-        <li>To respond to enquiries and deliver services you have requested.</li>
-        <li>To send relevant updates about projects or service offerings (you can opt out at any time).</li>
-        <li>To improve site performance and the quality of our work.</li>
-      </ul>
+function loadPolicies() {
+  if (POLICIES) return Promise.resolve(POLICIES);
+  if (!policiesPromise) {
+    policiesPromise = fetch("/policies.json")
+      .then((res) => {
+        if (!res.ok) throw new Error(`policies.json returned ${res.status}`);
+        return res.json();
+      })
+      .then((data) => (POLICIES = data))
+      .catch((err) => {
+        policiesPromise = null; // let the next click retry
+        throw err;
+      });
+  }
+  return policiesPromise;
+}
 
-      <h3>3. Sharing</h3>
-      <p>We do not sell your data. We share it only with trusted sub-processors (analytics, email, hosting, payment) strictly to deliver our services. Legal disclosure is made only if required by law.</p>
-
-      <h3>4. Your rights</h3>
-      <p>You may request access, correction, or deletion of your personal data at any time by emailing <a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a>. We respond within 30 days.</p>
-
-      <h3>5. Retention &amp; security</h3>
-      <p>We keep contact records for as long as the business relationship is active, plus 2 years for compliance. Data is stored on encrypted services and access is role-restricted.</p>
-
-      <h3>6. Contact</h3>
-      <p>Questions about this policy? Email <a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a>.</p>
-    `,
-  },
-  terms: {
-    eyebrow: "Last updated · July 2026",
-    title: "Terms of Service",
-    body: `
-      <p>By engaging <strong>theyashgupta.com</strong> for web development, performance, SEO, or paid-media services, you agree to the following terms.</p>
-
-      <h3>1. Scope of work</h3>
-      <p>Every engagement begins with a written proposal defining deliverables, milestones, timelines, and acceptance criteria. Work outside that scope is treated as a change request and may be billed separately.</p>
-
-      <h3>2. Payments</h3>
-      <ul>
-        <li>Website subscriptions: billed monthly or annually in advance; no setup fee; cancellable with 30 days' notice.</li>
-        <li>Fixed-scope projects: 50% deposit on kickoff, balance on launch.</li>
-        <li>Retainers: billed monthly in advance; cancellable with 14 days' notice.</li>
-        <li>Pay-per-lead: invoiced weekly based on validated leads.</li>
-        <li>All prices are exclusive of applicable taxes (GST where relevant).</li>
-      </ul>
-
-      <h3>3. Intellectual property</h3>
-      <p>Final deliverables transfer to the client upon full payment. We retain the right to display non-confidential parts of the work in our portfolio. Pre-existing tools, libraries, and frameworks remain ours or their original owners'.</p>
-
-      <h3>4. Client responsibilities</h3>
-      <p>Clients agree to provide timely feedback, content, and access (hosting, analytics, ad accounts). Delays in client input may shift project timelines and are not refundable.</p>
-
-      <h3>5. Warranty &amp; limitation of liability</h3>
-      <p>Work is delivered "as-is" with reasonable craft and care. We do not warrant uninterrupted uptime, specific search rankings, ad ROAS, or revenue outcomes. Total liability is capped at fees paid for the engagement in question.</p>
-
-      <h3>6. Termination</h3>
-      <p>Either party may terminate with written notice. Work completed up to the termination date is billable and deliverable.</p>
-
-      <h3>7. Governing law</h3>
-      <p>These terms are governed by the laws of India. Disputes are resolved in the courts of Lucknow, Uttar Pradesh.</p>
-    `,
-  },
-  refund: {
-    eyebrow: "Last updated · July 2026",
-    title: "Refund & Cancellation Policy",
-    body: `
-      <p>We aim for clear scope and fair outcomes. This policy explains how cancellations and refunds work across our engagement models.</p>
-
-      <h3>1. Website subscriptions</h3>
-      <ul>
-        <li>Plans are billed monthly or annually in advance. There is no setup fee and no lock-in period.</li>
-        <li>Cancel any time with 30 days' written notice — your site stays live through the end of the period you have already paid for.</li>
-        <li>Part-months and unused time on an annual plan are not refunded.</li>
-        <li>Hosting, SSL, and included domain renewals stop at the end of the notice period.</li>
-      </ul>
-
-      <h3>2. Fixed-scope projects</h3>
-      <ul>
-        <li>The 50% kickoff deposit is non-refundable once project planning has begun.</li>
-        <li>If work is cancelled mid-project, fees are pro-rated to the milestones completed.</li>
-        <li>Completed assets (designs, code, configs) are delivered after pro-rata settlement.</li>
-      </ul>
-
-      <h3>3. Monthly retainers</h3>
-      <ul>
-        <li>Cancellable with 14 days' written notice — billing stops at the end of the current cycle.</li>
-        <li>Unused retainer hours do not roll over and are not refundable.</li>
-      </ul>
-
-      <h3>4. Pay-per-lead engagements</h3>
-      <ul>
-        <li>Lead-quality criteria are defined in writing before campaigns launch.</li>
-        <li>Leads failing the agreed criteria (wrong country, fake number, spam) are replaced free of charge.</li>
-        <li>Refunds are not issued for delivered, qualifying leads.</li>
-      </ul>
-
-      <h3>5. How to request</h3>
-      <p>Email <a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a> with your invoice reference and reason. We respond within 5 business days.</p>
-    `,
-  },
-  cookies: {
-    eyebrow: "Last updated · May 2026",
-    title: "Cookie Policy",
-    body: `
-      <p>This site uses cookies and similar technologies to improve performance, understand how the site is used, and (with your consent) measure marketing.</p>
-
-      <h3>1. Types of cookies we use</h3>
-      <ul>
-        <li><strong>Essential</strong> — required for the site to function; cannot be disabled.</li>
-        <li><strong>Analytics</strong> — Google Analytics 4 / Tag Manager, set only if you accept analytics cookies.</li>
-        <li><strong>Marketing</strong> — Meta Pixel and Google Ads tags, set only if you accept marketing cookies.</li>
-      </ul>
-
-      <h3>2. Managing cookies</h3>
-      <p>You can clear or block cookies via your browser settings. Blocking essential cookies may break parts of the site.</p>
-
-      <h3>3. Third-party processors</h3>
-      <p>Analytics and ad cookies are processed by Google and Meta under their respective privacy policies.</p>
-
-      <h3>4. Questions</h3>
-      <p>Email <a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a> for more information.</p>
-    `,
-  },
-  disclaimer: {
-    eyebrow: "Last updated · May 2026",
-    title: "Disclaimer",
-    body: `
-      <p>The information and services offered on <strong>theyashgupta.com</strong> are provided for general business purposes. By using this site, you accept the following:</p>
-
-      <h3>1. No guaranteed results</h3>
-      <p>Web development, SEO, and paid-media outcomes depend on many variables outside our control — including market conditions, offer quality, competitive intensity, and platform algorithms. While we apply best practices and disclose our methodology transparently, we do not guarantee specific rankings, traffic, leads, revenue, or ROAS.</p>
-
-      <h3>2. Performance metrics shown</h3>
-      <p>Statistics displayed on this site (traffic lifts, ROAS, lead counts) represent average or selected results across past engagements. Your results will vary based on your stage, niche, and budget.</p>
-
-      <h3>3. External links</h3>
-      <p>This site may link to third-party platforms (WhatsApp, Google, Meta, etc.). We are not responsible for the content, privacy practices, or terms of those external services.</p>
-
-      <h3>4. Not legal, financial, or tax advice</h3>
-      <p>Nothing on this site constitutes legal, financial, or tax advice. Consult a qualified professional for those matters.</p>
-
-      <h3>5. Changes</h3>
-      <p>We may update this disclaimer at any time. Continued use of the site means you accept the updated version.</p>
-    `,
-  },
-};
-
-/* --------------------------------------------------- Modal focus trap
-   Both modals declare aria-modal="true", which promises the rest of the page is
-   inert. Without this, Tab walks straight out of the dialog into the 80+
-   focusable elements behind the overlay — the keyboard user loses the modal
-   with no way back. Call from each modal's keydown handler. */
 function trapFocus(container, e) {
   if (e.key !== "Tab") return;
   const items = [
@@ -574,25 +442,42 @@ function initPolicyModal() {
 
   let lastFocus = null;
 
-  const open = (key) => {
-    const p = POLICIES[key];
-    if (!p) return;
-    titleEl.textContent = p.title;
-    eyebrowEl.textContent = p.eyebrow;
-    bodyEl.innerHTML = p.body.trim();
+  // Opens immediately with a loading state, then fills in once the fetch lands,
+  // so a slow connection never leaves the click feeling dead.
+  const open = async (key) => {
+    lastFocus = document.activeElement;
+    eyebrowEl.textContent = "Legal";
+    titleEl.textContent = "Loading…";
+    bodyEl.innerHTML = "";
     bodyEl.scrollTop = 0;
 
-    lastFocus = document.activeElement;
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
+    lockScroll();
     requestAnimationFrame(() => closeBtn?.focus());
+
+    try {
+      const p = (await loadPolicies())[key];
+      if (!p) throw new Error(`unknown policy: ${key}`);
+      eyebrowEl.textContent = p.eyebrow;
+      titleEl.textContent = p.title;
+      bodyEl.innerHTML = p.body;
+      bodyEl.scrollTop = 0;
+    } catch (err) {
+      eyebrowEl.textContent = "Legal";
+      titleEl.textContent = "Couldn't load that document";
+      bodyEl.innerHTML =
+        '<p>Something went wrong fetching this policy. Email ' +
+        '<a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a> ' +
+        "and I'll send it across.</p>";
+      console.warn("Policy load failed:", err);
+    }
   };
 
   const close = () => {
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
+    unlockScroll();
     if (lastFocus && typeof lastFocus.focus === "function") {
       lastFocus.focus();
     }
@@ -829,12 +714,22 @@ function initBillingToggle() {
 
 /* --------------------------------------------------- Scroll lock shared by modals
    Lenis runs its own rAF loop, so `body { overflow: hidden }` alone doesn't stop
-   the page moving behind a modal — it has to be paused explicitly. */
+   the page moving behind a modal — it has to be paused explicitly.
+
+   Reference-counted because modals stack: the Privacy Policy opens on top of the
+   subscription form. Closing the policy must not unlock the page while the form
+   underneath is still open. */
+let scrollLocks = 0;
+
 function lockScroll() {
+  scrollLocks += 1;
   document.body.classList.add("modal-open");
   LENIS?.stop();
 }
+
 function unlockScroll() {
+  scrollLocks = Math.max(0, scrollLocks - 1);
+  if (scrollLocks > 0) return; // another modal is still open
   document.body.classList.remove("modal-open");
   LENIS?.start();
 }
