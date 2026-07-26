@@ -1,0 +1,103 @@
+{% extends "website/_blog_base.html" %}
+
+{% block title %}Blog · Yash Gupta — Web performance, SEO, and paid media field notes{% endblock %}
+{% block meta_description %}Tactical breakdowns of performance, SEO, and paid media — real numbers from real builds.{% endblock %}
+{% block og_title %}Blog · Yash Gupta{% endblock %}
+{% block og_description %}Tactical breakdowns of performance, SEO, and paid media — real numbers from real builds.{% endblock %}
+{% block twitter_title %}Blog · Yash Gupta{% endblock %}
+{% block twitter_description %}Tactical breakdowns of performance, SEO, and paid media.{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "theyashgupta.com Blog",
+  "url": "{{ base_url }}/blog/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "theyashgupta.com",
+    "logo": { "@type": "ImageObject", "url": "{{ base_url }}/logo.svg" }
+  },
+  "blogPost": [
+    {% for post in posts %}{
+      "@type": "BlogPosting",
+      "headline": "{{ post.title|escapejs }}",
+      "url": "{{ base_url }}/blog/{{ post.slug }}/",
+      "datePublished": "{{ post.published_at|date:'c' }}",
+      "author": { "@type": "Person", "name": "{{ post.author_name|escapejs }}" }
+    }{% if not forloop.last %},{% endif %}{% endfor %}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ base_url }}/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ base_url }}/blog/" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<header class="blog-hero">
+  <div class="blog-hero-orb" aria-hidden="true"></div>
+  <div class="blog-hero-inner">
+    <p class="eyebrow">Field notes · insights</p>
+    <h1 class="blog-hero-title">Lessons from the<br/><span class="grad-text">build trenches.</span></h1>
+    <p class="blog-hero-lead">Tactical breakdowns of what worked, what didn't, and the numbers behind both. Short reads, no fluff.</p>
+  </div>
+</header>
+
+<section class="blog-list-section">
+  <div class="blog-filters" id="blogFilters" role="tablist" aria-label="Filter posts by topic">
+    <button class="filter-pill is-active" data-filter="all">All posts</button>
+    {% for tag in tags %}<button class="filter-pill" data-filter="{{ tag }}">{{ tag }}</button>{% endfor %}
+  </div>
+
+  <div class="blog-list" id="blogList">
+    {% for post in posts %}
+    <a class="blog-card" data-tag="{{ post.tag }}" href="/blog/{{ post.slug }}/">
+      <div class="blog-card-cover">
+        <span class="glyph" aria-hidden="true">{{ post.cover_emoji|default:"✦" }}</span>
+      </div>
+      <div class="blog-card-body">
+        <span class="blog-card-tag">{{ post.tag }}</span>
+        <h2 class="blog-card-title">{{ post.title }}</h2>
+        <p class="blog-card-excerpt">{{ post.excerpt }}</p>
+        <div class="blog-card-meta">
+          <span>{{ post.published_at|date:"M j, Y" }}</span>
+          <span class="blog-card-meta-dot"></span>
+          <span>{{ post.read_minutes }} min read</span>
+        </div>
+      </div>
+    </a>
+    {% empty %}
+    <p class="blog-empty">No posts yet — check back soon.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="blog-cta">
+  <div class="blog-cta-inner">
+    <h2>Want these in your inbox?</h2>
+    <p>New posts are usually one per fortnight. No spam, unsubscribe in one click.</p>
+    <a class="btn btn-primary" href="/#contact">Get on the list →</a>
+  </div>
+</section>
+
+<script>
+  // Filter logic (server-rendered cards; client just hides/shows)
+  const pills = document.querySelectorAll('.filter-pill');
+  const cards = document.querySelectorAll('.blog-card');
+  pills.forEach(p => p.addEventListener('click', () => {
+    pills.forEach(b => b.classList.remove('is-active'));
+    p.classList.add('is-active');
+    const f = p.dataset.filter;
+    cards.forEach(c => { c.style.display = (f === 'all' || c.dataset.tag === f) ? '' : 'none'; });
+  }));
+</script>
+{% endblock %}

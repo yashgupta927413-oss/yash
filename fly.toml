@@ -1,0 +1,43 @@
+# fly.toml app configuration file generated for theyashgupta on 2026-05-18T20:34:16+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'theyashgupta'
+primary_region = 'bom'
+
+[build]
+
+[env]
+  DATABASE_PATH = '/data/db.sqlite3'
+  DJANGO_DEBUG = 'false'
+  DJANGO_SETTINGS_MODULE = 'config.settings'
+  PORT = '8080'
+  PYTHONUNBUFFERED = '1'
+  SITE_BASE_URL = 'https://theyashgupta.com'
+  SITE_DOMAIN = 'theyashgupta.com'
+  WHITENOISE_ROOT = '/app/frontend_dist'
+
+[[mounts]]
+  source = 'tyg_data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/admin/login/'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256

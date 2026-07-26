@@ -5,8 +5,10 @@ from django.shortcuts import redirect, render
 from django.utils.html import format_html
 import json
 from .models import (
+    BlogPost,
     FAQ,
     GoogleReview,
+    Lead,
     Module,
     Policy,
     PricingPlan,
@@ -17,6 +19,73 @@ from .models import (
     Statistic,
     Tool,
 )
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ("title", "tag", "is_published", "published_at", "read_minutes")
+    list_filter = ("is_published", "tag", "published_at")
+    search_fields = ("title", "subtitle", "excerpt", "body")
+    list_editable = ("is_published",)
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "published_at"
+    ordering = ("-published_at",)
+    fieldsets = (
+        ("Visibility", {"fields": ("is_published", "published_at")}),
+        ("Content", {"fields": ("title", "subtitle", "tag", "slug", "excerpt", "body")}),
+        ("Display", {"fields": ("cover_emoji", "read_minutes", "author_name")}),
+        ("Meta", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+    )
+    readonly_fields = ("created_at", "updated_at")
+
+
+@admin.register(Lead)
+class LeadAdmin(admin.ModelAdmin):
+    list_display = (
+        "created_at",
+        "kind",
+        "status",
+        "name",
+        "email",
+        "phone",
+        "company",
+        "project_type",
+        "budget",
+    )
+    list_filter = ("kind", "status", "project_type", "budget", "created_at")
+    search_fields = (
+        "name",
+        "email",
+        "phone",
+        "company",
+        "brief",
+        "site_url",
+    )
+    list_editable = ("status",)
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "ip_address",
+        "user_agent",
+        "referrer",
+    )
+    fieldsets = (
+        ("Submission", {
+            "fields": ("kind", "status", "created_at", "updated_at"),
+        }),
+        ("Contact details", {
+            "fields": ("name", "email", "phone", "company"),
+        }),
+        ("Project brief", {
+            "fields": ("project_type", "budget", "brief", "site_url"),
+        }),
+        ("Internal", {
+            "fields": ("notes", "ip_address", "user_agent", "referrer"),
+            "classes": ("collapse",),
+        }),
+    )
+    date_hierarchy = "created_at"
+    ordering = ("-created_at",)
 
 admin.site.site_header = "theyashgupta.com Admin"
 admin.site.site_title = "Yash Admin"

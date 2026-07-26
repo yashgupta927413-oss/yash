@@ -1,0 +1,106 @@
+{% extends "website/_blog_base.html" %}
+
+{% block title %}{{ post.title }} · Yash Gupta{% endblock %}
+{% block meta_description %}{{ post.excerpt|striptags }}{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.excerpt|striptags }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_url %}{{ canonical_url }}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block twitter_description %}{{ post.excerpt|striptags }}{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ post.title|escapejs }}",
+  "description": "{{ post.excerpt|striptags|escapejs }}",
+  "image": "{{ base_url }}/og-image.png",
+  "author": {
+    "@type": "Person",
+    "name": "{{ post.author_name|escapejs }}",
+    "url": "{{ base_url }}/#about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "theyashgupta.com",
+    "logo": { "@type": "ImageObject", "url": "{{ base_url }}/logo.svg" }
+  },
+  "datePublished": "{{ post.published_at|date:'c' }}",
+  "dateModified": "{{ post.updated_at|date:'c' }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ canonical_url }}"
+  },
+  "articleSection": "{{ post.tag|escapejs }}",
+  "wordCount": "{{ post.body|wordcount }}"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ base_url }}/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ base_url }}/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "{{ post.title|escapejs }}", "item": "{{ canonical_url }}" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="post">
+  <div class="post-content">
+    <a class="post-back" href="/blog/">← All posts</a>
+    <p class="post-tag">{{ post.tag }}</p>
+    <h1 class="post-title">{{ post.title }}</h1>
+    {% if post.subtitle %}<p class="post-subtitle">{{ post.subtitle }}</p>{% endif %}
+    <div class="post-meta">
+      <span>{{ post.author_name }}</span>
+      <span class="post-meta-dot"></span>
+      <span>{{ post.published_at|date:"F j, Y" }}</span>
+      <span class="post-meta-dot"></span>
+      <span>{{ post.read_minutes }} min read</span>
+    </div>
+    <div class="post-cover" aria-hidden="true">
+      <span class="post-cover-glyph">{{ post.cover_emoji|default:"✦" }}</span>
+    </div>
+    <div class="post-prose">{{ post.body|safe }}</div>
+  </div>
+
+  {% if related %}
+  <section class="post-related">
+    <h2 class="post-related-h">More in {{ post.tag }}</h2>
+    <div class="post-related-grid">
+      {% for r in related %}
+      <a class="blog-card" href="/blog/{{ r.slug }}/">
+        <div class="blog-card-cover"><span class="glyph">{{ r.cover_emoji|default:"✦" }}</span></div>
+        <div class="blog-card-body">
+          <span class="blog-card-tag">{{ r.tag }}</span>
+          <h3 class="blog-card-title">{{ r.title }}</h3>
+          <p class="blog-card-excerpt">{{ r.excerpt }}</p>
+          <div class="blog-card-meta">
+            <span>{{ r.published_at|date:"M j, Y" }}</span>
+            <span class="blog-card-meta-dot"></span>
+            <span>{{ r.read_minutes }} min</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <aside class="post-cta">
+    <p class="post-cta-eyebrow">Need this work shipped on your site?</p>
+    <h3>I build, run, and measure all of this for ambitious teams.</h3>
+    <div class="post-cta-actions">
+      <a class="btn btn-primary" href="/#contact">Start a project →</a>
+      <a class="btn btn-ghost" href="/blog/">Read more posts</a>
+    </div>
+  </aside>
+</article>
+{% endblock %}

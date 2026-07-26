@@ -1,0 +1,119 @@
+{% extends "website/_blog_base.html" %}
+
+{% block title %}{{ svc.title }} — Yash Gupta{% endblock %}
+{% block meta_description %}{{ svc.meta_description }}{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+{% block og_title %}{{ svc.title }}{% endblock %}
+{% block og_description %}{{ svc.meta_description }}{% endblock %}
+{% block og_url %}{{ canonical_url }}{% endblock %}
+{% block twitter_title %}{{ svc.title }}{% endblock %}
+{% block twitter_description %}{{ svc.meta_description }}{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{{ svc.h1|escapejs }}",
+  "description": "{{ svc.meta_description|escapejs }}",
+  "url": "{{ canonical_url }}",
+  "provider": {
+    "@type": "ProfessionalService",
+    "name": "theyashgupta.com",
+    "url": "{{ base_url }}/",
+    "founder": { "@type": "Person", "name": "Yash Gupta" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Lucknow", "addressRegion": "Uttar Pradesh", "addressCountry": "IN" },
+    "telephone": "+91-9696345822",
+    "email": "yash@theyashgupta.com"
+  },
+  "areaServed": ["IN", "US", "GB", "AE", "SG"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for f in svc.faqs %}{
+      "@type": "Question",
+      "name": "{{ f.q|escapejs }}",
+      "acceptedAnswer": { "@type": "Answer", "text": "{{ f.a|escapejs }}" }
+    }{% if not forloop.last %},{% endif %}{% endfor %}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ base_url }}/" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "{{ base_url }}/#build" },
+    { "@type": "ListItem", "position": 3, "name": "{{ svc.h1|escapejs }}", "item": "{{ canonical_url }}" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<header class="blog-hero">
+  <div class="blog-hero-orb" aria-hidden="true"></div>
+  <div class="blog-hero-inner">
+    <p class="eyebrow">{{ svc.eyebrow }}</p>
+    <h1 class="blog-hero-title">{{ svc.h1 }}</h1>
+    <p class="blog-hero-lead">{{ svc.intro }}</p>
+  </div>
+</header>
+
+<article class="post">
+  <div class="post-content">
+    <div class="post-prose">
+      {% for s in svc.sections %}
+        <h2>{{ s.h2 }}</h2>
+        {{ s.body|safe }}
+      {% endfor %}
+
+      <h2>Frequently asked questions</h2>
+    </div>
+
+    <div class="faq-list" style="margin-top: 24px;">
+      {% for f in svc.faqs %}
+      <details class="faq-item">
+        <summary>
+          <span>{{ f.q }}</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq-body"><p>{{ f.a }}</p></div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if related %}
+  <section class="post-related">
+    <h2 class="post-related-h">From the blog</h2>
+    <div class="post-related-grid">
+      {% for r in related %}
+      <a class="blog-card" href="/blog/{{ r.slug }}/">
+        <div class="blog-card-cover"><span class="glyph">{{ r.cover_emoji|default:"✦" }}</span></div>
+        <div class="blog-card-body">
+          <span class="blog-card-tag">{{ r.tag }}</span>
+          <h3 class="blog-card-title">{{ r.title }}</h3>
+          <p class="blog-card-excerpt">{{ r.excerpt }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <aside class="post-cta">
+    <p class="post-cta-eyebrow">Ready when you are</p>
+    <h3>{{ svc.cta_heading }}</h3>
+    <div class="post-cta-actions">
+      <a class="btn btn-primary" href="/#contact">Start a project →</a>
+      <a class="btn btn-ghost" target="_blank" rel="noopener noreferrer" href="https://wa.me/919696345822?text=Hi%20Yash%2C%20I%27m%20interested%20in%20{{ svc.h1|urlencode }}.">WhatsApp me</a>
+    </div>
+  </aside>
+</article>
+{% endblock %}

@@ -1,6 +1,99 @@
 from django.db import models
 
 
+class BlogPost(models.Model):
+    """Long-form posts surfaced on /blog/ and /blog/post.html?slug=<slug>."""
+
+    slug = models.SlugField(max_length=140, unique=True, help_text="URL slug — kebab-case, no spaces.")
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=240, blank=True)
+    tag = models.CharField(max_length=60, default="Insights", help_text="Category badge shown above the title.")
+    excerpt = models.TextField(max_length=320, help_text="2-line summary used on the listing page and OG preview.")
+    body = models.TextField(help_text="Full post body in HTML. Use h2, h3, p, ul, ol, blockquote, pre, code, a, strong, em.")
+    cover_emoji = models.CharField(max_length=10, blank=True, default="✦", help_text="Decorative glyph rendered into the cover art tile if no image.")
+    read_minutes = models.PositiveIntegerField(default=6)
+    author_name = models.CharField(max_length=120, default="Yash Gupta")
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
+        indexes = [models.Index(fields=["is_published", "-published_at"])]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Lead(models.Model):
+    """Captures every form submission from the marketing site.
+
+    The frontend posts three flavors:
+      - `seo_audit_request`   (audit form) — just url + email
+      - `project_inquiry`     (contact form) — full project brief
+      - `subscription_inquiry` (#plans modal) — a WaaS tier + billing period,
+        stored in the existing `project_type` / `budget` columns
+    All land in the same table; the `kind` column tells you which.
+    """
+
+    KIND_AUDIT = "seo_audit_request"
+    KIND_INQUIRY = "project_inquiry"
+    KIND_SUBSCRIPTION = "subscription_inquiry"
+    KIND_CHOICES = [
+        (KIND_AUDIT, "SEO Audit Request"),
+        (KIND_INQUIRY, "Project Inquiry"),
+        (KIND_SUBSCRIPTION, "Subscription Inquiry"),
+    ]
+
+    STATUS_NEW = "new"
+    STATUS_CONTACTED = "contacted"
+    STATUS_QUALIFIED = "qualified"
+    STATUS_WON = "won"
+    STATUS_LOST = "lost"
+    STATUS_CHOICES = [
+        (STATUS_NEW, "New"),
+        (STATUS_CONTACTED, "Contacted"),
+        (STATUS_QUALIFIED, "Qualified"),
+        (STATUS_WON, "Won"),
+        (STATUS_LOST, "Lost / Closed"),
+    ]
+
+    kind = models.CharField(max_length=32, choices=KIND_CHOICES, default=KIND_INQUIRY)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_NEW)
+
+    # Shared / inquiry fields
+    name = models.CharField(max_length=120, blank=True)
+    email = models.EmailField()
+    company = models.CharField(max_length=120, blank=True)
+    phone = models.CharField(max_length=40, blank=True)
+    project_type = models.CharField(max_length=120, blank=True)
+    budget = models.CharField(max_length=60, blank=True)
+    brief = models.TextField(blank=True)
+
+    # Audit-form-specific field
+    site_url = models.URLField(max_length=400, blank=True)
+
+    # Operational metadata (server-side only)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=400, blank=True)
+    referrer = models.URLField(max_length=400, blank=True)
+    notes = models.TextField(blank=True, help_text="Internal notes from follow-ups.")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["kind", "status"]),
+            models.Index(fields=["-created_at"]),
+        ]
+
+    def __str__(self) -> str:
+        label = self.name or self.email or "Anonymous"
+        return f"{self.get_kind_display()} · {label}"
+
+
 class FAQ(models.Model):
     question = models.CharField(max_length=255)
     answer = models.TextField()

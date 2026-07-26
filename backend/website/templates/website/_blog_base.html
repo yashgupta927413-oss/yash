@@ -1,0 +1,99 @@
+{% load static %}<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{% block meta_description %}Insights from theyashgupta.com — web performance, programmatic SEO, and paid media field notes.{% endblock %}" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href="{% block canonical %}{{ base_url }}{{ request.path }}{% endblock %}" />
+    <meta property="og:title" content="{% block og_title %}{{ block.super }}Blog · Yash Gupta{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}Insights from the build trenches — performance, SEO, and paid media tactics.{% endblock %}" />
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+    <meta property="og:url" content="{% block og_url %}{{ base_url }}{{ request.path }}{% endblock %}" />
+    <meta property="og:image" content="{{ base_url }}/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{% block twitter_title %}{{ block.super }}{% endblock %}" />
+    <meta name="twitter:description" content="{% block twitter_description %}{{ block.super }}{% endblock %}" />
+    <meta name="twitter:image" content="{{ base_url }}/og-image.png" />
+    <title>{% block title %}Blog · Yash Gupta{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/posts.css" />
+    {% block schema %}{% endblock %}
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to content</a>
+
+    <nav class="topnav scrolled" id="topnav">
+      <div class="topnav-inner">
+        <a class="brand" href="/" aria-label="Home">
+          <img src="/logo.svg?v=4" alt="theyashgupta" class="brand-logo" />
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/#webdev">Web Dev</a></li>
+          <li><a href="/#marketing">Marketing</a></li>
+          <li><a href="/#seo">SEO</a></li>
+          <li><a href="/blog/" class="is-current">Blog</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+        </ul>
+        <a class="cta-pill" href="/#contact">Start a project →</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <main id="mainContent" class="blog-page">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="/logo.svg?v=4" alt="theyashgupta" />
+          <p>Engineering websites and growth systems for ambitious teams.</p>
+        </div>
+        <div class="footer-cols">
+          <div>
+            <p class="footer-h">Services</p>
+            <a href="/services/web-development/">Web Development</a>
+            <a href="/services/digital-marketing/">Digital Marketing</a>
+            <a href="/services/seo/">SEO Services</a>
+          </div>
+          <div>
+            <p class="footer-h">Studio</p>
+            <a href="/#about">About</a>
+            <a href="/#work">Work</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/#contact">Contact</a>
+          </div>
+          <div>
+            <p class="footer-h">Read</p>
+            <a href="/blog/">All posts</a>
+            <a href="/#testimonials">Testimonials</a>
+            <a href="/#faq">FAQ</a>
+          </div>
+          <div>
+            <p class="footer-h">Connect</p>
+            <a href="mailto:yash@theyashgupta.com">yash@theyashgupta.com</a>
+            <a href="tel:+919696345822">+91 96963 45822</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://wa.me/919696345822">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-base">
+        <p>© 2026 Yash Gupta · theyashgupta.com</p>
+      </div>
+    </footer>
+
+    <script>
+      const nav = document.getElementById("topnav");
+      const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 20);
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    </script>
+  </body>
+</html>

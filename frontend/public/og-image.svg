@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#000"/>
+      <stop offset="100%" stop-color="#0a0a14"/>
+    </linearGradient>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2997ff"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#ff7a59"/>
+    </linearGradient>
+    <radialGradient id="orb1" cx="0.2" cy="0.3" r="0.5">
+      <stop offset="0%" stop-color="#2997ff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#2997ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="0.8" cy="0.7" r="0.5">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#orb1)"/>
+  <rect width="1200" height="630" fill="url(#orb2)"/>
+
+  <!-- Logo mark -->
+  <g transform="translate(80, 70)">
+    <rect width="56" height="56" rx="14" fill="url(#grad)"/>
+    <text x="14" y="38" font-family="-apple-system, 'SF Pro Display', Inter, sans-serif" font-size="22" font-weight="800" fill="#000">TY</text>
+    <text x="80" y="34" font-family="-apple-system, 'SF Pro Display', Inter, sans-serif" font-size="22" font-weight="600" fill="#f5f5f7" letter-spacing="-0.5">theyashgupta</text>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="80" y="280" font-family="-apple-system, 'SF Pro Text', Inter, sans-serif" font-size="20" font-weight="600" fill="rgba(245,245,247,0.6)" letter-spacing="3">ENGINEERING · PERFORMANCE · GROWTH</text>
+
+  <!-- Main headline -->
+  <text x="80" y="380" font-family="-apple-system, 'SF Pro Display', Inter, sans-serif" font-size="84" font-weight="700" fill="#f5f5f7" letter-spacing="-3">Websites that</text>
+  <text x="80" y="480" font-family="-apple-system, 'SF Pro Display', Inter, sans-serif" font-size="84" font-weight="700" fill="url(#grad)" letter-spacing="-3">move the metric.</text>
+
+  <!-- Footer line -->
+  <text x="80" y="570" font-family="-apple-system, 'SF Pro Text', Inter, sans-serif" font-size="22" fill="rgba(245,245,247,0.5)">Web Development · Performance · SEO · Paid Media</text>
+</svg>
