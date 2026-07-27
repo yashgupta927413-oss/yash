@@ -8,6 +8,7 @@ from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
 from .models import BlogPost
+from .policies import POLICY_ORDER
 
 
 class StaticSitemap(Sitemap):
@@ -33,6 +34,10 @@ class StaticSitemap(Sitemap):
             ("faq", "/#faq", 0.6, "monthly"),
             ("contact", "/#contact", 0.7, "monthly"),
             ("blog", "/blog/", 0.9, "weekly"),
+            ("legal", "/legal/", 0.5, "yearly"),
+        ] + [
+            (f"legal-{slug}", f"/legal/{slug}/", 0.4, "yearly")
+            for slug in POLICY_ORDER
         ]
 
     def location(self, item):

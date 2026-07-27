@@ -1,0 +1,33 @@
+{% extends "website/_blog_base.html" %}
+
+{% block title %}Policies & legal · theyashgupta.com{% endblock %}
+{% block meta_description %}Terms of service, privacy policy, refund and cancellation terms, domain ownership, and acceptable use for theyashgupta.com.{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+{% block og_title %}Policies & legal · theyashgupta.com{% endblock %}
+{% block og_description %}Terms, privacy, refunds, domain ownership, and acceptable use — in plain language.{% endblock %}
+{% block og_url %}{{ canonical_url }}{% endblock %}
+{% block twitter_title %}Policies & legal · theyashgupta.com{% endblock %}
+{% block twitter_description %}Terms, privacy, refunds, domain ownership, and acceptable use.{% endblock %}
+
+{% block content %}
+<article class="legal">
+  <header class="legal-head">
+    <p class="legal-eyebrow">Policies &amp; legal</p>
+    <h1 class="legal-title">The fine print,<br>written plainly.</h1>
+    <p class="legal-lead">
+      Everything governing an engagement with theyashgupta.com. If anything here is
+      unclear, ask before you sign up rather than after.
+    </p>
+  </header>
+
+  <div class="legal-list">
+    {% for p in policies %}
+    <a class="legal-card" href="/legal/{{ p.slug }}/">
+      <h2>{{ p.title }}</h2>
+      <p>{{ p.blurb }}</p>
+      <span class="legal-card-meta">{{ p.eyebrow }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</article>
+{% endblock %}

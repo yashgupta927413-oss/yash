@@ -506,6 +506,10 @@ function initPolicyModal() {
 
   document.querySelectorAll("[data-policy]").forEach((a) => {
     a.addEventListener("click", (e) => {
+      // These now carry real hrefs (/legal/<slug>/) so crawlers and Meta's ad
+      // reviewer can reach the documents. Let any modified or non-primary click
+      // through to the actual page — only a plain left-click opens the modal.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
       e.preventDefault();
       open(a.getAttribute("data-policy"));
     });

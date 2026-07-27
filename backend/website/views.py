@@ -412,3 +412,45 @@ def create_lead(request):
             }.get(lead.kind, "Brief received. You'll hear back within 24 hours."),
         }
     )
+
+
+# ---------------------------------------------------------------------------
+# Server-rendered legal pages at /legal/ and /legal/<slug>/.
+# Real crawlable URLs — required by Meta Lead Ads, which fetches the privacy
+# policy URL and checks the document is actually in the HTML. The on-page modal
+# reads the same policies.json, so the two can never drift apart.
+# ---------------------------------------------------------------------------
+
+
+def legal_index(request):
+    from .policies import all_policies
+
+    base_url = getattr(settings, "SITE_BASE_URL", "https://theyashgupta.com")
+    return render(
+        request,
+        "website/legal_index.html",
+        {
+            "policies": all_policies(),
+            "base_url": base_url,
+            "canonical_url": f"{base_url}/legal/",
+        },
+    )
+
+
+def legal_page(request, slug: str):
+    from .policies import all_policies, get_policy
+
+    policy = get_policy(slug)
+    if policy is None:
+        raise Http404("Unknown policy")
+    base_url = getattr(settings, "SITE_BASE_URL", "https://theyashgupta.com")
+    return render(
+        request,
+        "website/legal_page.html",
+        {
+            "policy": policy,
+            "others": [p for p in all_policies() if p["slug"] != slug],
+            "base_url": base_url,
+            "canonical_url": f"{base_url}/legal/{slug}/",
+        },
+    )
