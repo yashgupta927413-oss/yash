@@ -20,8 +20,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/posts.css" />
+    {% comment %}
+      Hashed build assets resolved from Vite's manifest by website.assets.
+      Hard-coding /styles.css here silently 404'd in production — these pages
+      rendered without the main stylesheet.
+    {% endcomment %}
+    {% for href in vite_css %}<link rel="stylesheet" href="{{ href }}" />
+    {% endfor %}<link rel="stylesheet" href="/posts.css" />
     {% block schema %}{% endblock %}
   </head>
   <body>

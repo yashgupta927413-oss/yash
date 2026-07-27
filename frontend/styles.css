@@ -1985,6 +1985,30 @@ p { margin: 0; color: var(--text-dim); }
 
 body.modal-open { overflow: hidden; }
 
+/* ---- Modal scroll affordance (see initScrollFade in script.js)
+   Touch devices draw no persistent scrollbar, so a long policy inside a short
+   panel read as "not scrollable". This fades the bottom edge while there is
+   more to read, and clears at the end. */
+.policy-modal-card::after,
+.sub-modal-card::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 52px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(14, 14, 16, 0), #0e0e10 85%);
+  transition: opacity .25s var(--easing);
+}
+.policy-modal-card.is-scroll-end::after,
+.sub-modal-card.is-scroll-end::after { opacity: 0; }
+
+/* Keep a visible scrollbar in the panels on platforms that support it. */
+.policy-modal-body,
+.sub-modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
 @media (max-width: 720px) {
   .policy-modal { padding: 0; }
   .policy-modal-card {

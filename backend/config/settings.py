@@ -58,6 +58,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Supplies vite_css / vite_js so server-rendered pages link the
+                # real hashed bundle instead of a non-existent /styles.css.
+                'website.assets.vite_context',
             ],
         },
     },

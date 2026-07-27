@@ -405,6 +405,25 @@ function loadPolicies() {
   return policiesPromise;
 }
 
+/* --------------------------------------------------- Scroll affordance
+   Touch devices draw no persistent scrollbar, so a 6,000px policy inside a
+   630px panel looked like it simply ended at the fold — readers reported the
+   modals as "not scrollable" when they were. A fade over the bottom edge marks
+   that there is more, and clears once you reach the end. */
+function initScrollFade(scroller, card) {
+  if (!scroller || !card) return;
+  const update = () => {
+    const done =
+      scroller.scrollHeight - scroller.clientHeight <= 8 || // nothing to scroll
+      scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 8;
+    card.classList.toggle("is-scroll-end", done);
+  };
+  scroller.addEventListener("scroll", update, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(update).observe(scroller);
+  update();
+  return update;
+}
+
 function trapFocus(container, e) {
   if (e.key !== "Tab") return;
   const items = [
@@ -441,6 +460,7 @@ function initPolicyModal() {
   if (!modal || !card || !bodyEl) return;
 
   let lastFocus = null;
+  const refreshFade = initScrollFade(bodyEl, card);
 
   // Opens immediately with a loading state, then fills in once the fetch lands,
   // so a slow connection never leaves the click feeling dead.
@@ -463,6 +483,7 @@ function initPolicyModal() {
       titleEl.textContent = p.title;
       bodyEl.innerHTML = p.body;
       bodyEl.scrollTop = 0;
+      refreshFade?.();
     } catch (err) {
       eyebrowEl.textContent = "Legal";
       titleEl.textContent = "Couldn't load that document";
@@ -747,6 +768,8 @@ function initSubscriptionModal() {
   const billingSelect = document.getElementById("subBillingSelect");
   const messageEl = document.getElementById("subMessage");
   const successEl = document.getElementById("subSuccess");
+  const modalCard = modal.querySelector(".sub-modal-card");
+  const refreshFade = initScrollFade(modal.querySelector(".sub-modal-body"), modalCard);
 
   let lastFocus = null;
 
@@ -780,7 +803,10 @@ function initSubscriptionModal() {
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
     lockScroll();
-    requestAnimationFrame(() => closeBtn?.focus());
+    requestAnimationFrame(() => {
+      closeBtn?.focus();
+      refreshFade?.();
+    });
   };
 
   const close = () => {
@@ -1147,7 +1173,13 @@ function initInsightsPop() {
 /* --------------------------------------------------- Lenis inertia smooth scroll */
 function initLenis() {
   if (!window.Lenis || prefersReducedMotion) return null;
-  const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+  const lenis = new Lenis({
+    lerp: 0.09,
+    smoothWheel: true,
+    // Belt-and-braces alongside data-lenis-prevent: never hijack a gesture that
+    // began anywhere inside a modal, however deeply nested the event target.
+    prevent: (node) => !!node.closest?.(".policy-modal, .sub-modal"),
+  });
   const raf = (time) => {
     lenis.raf(time);
     requestAnimationFrame(raf);
